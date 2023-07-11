@@ -15,4 +15,3 @@
 <script setup>
 import Logo from '~/assets/img/directus-ssr.png'
 </script>
- 

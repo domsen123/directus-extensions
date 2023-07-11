@@ -66,7 +66,7 @@ ROOT_REDIRECT=false
 ```
 
 ### FOURTH STEP
-Be sure, that your index.html includes the following <!-- COMMENTS --> 
+Be sure, that your index.html includes the following COMMENTS (--app-html-- and --preload-links--) exactly as shown below:
 
 ```html
 <!DOCTYPE html>

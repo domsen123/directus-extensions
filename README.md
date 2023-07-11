@@ -22,14 +22,20 @@ But your ```src/main.ts``` file should look similar like this:
 import { handler } from 'directus-extension-ssr'
 import App from './App.vue'
 
-export default handler(App, {
-  routes: [
-    {
-      path: '/',
-      component: () => import('./pages/Home.vue'),
-    },
-  ],
-})
+export default handler(App,
+  {
+    routes: [
+      { path: '/', component: () => import('./pages/Home.vue') },
+      { path: '/about', component: () => import('./pages/About.vue') },
+    ],
+  },
+  (ctx) => {
+    // Add your custom logic here
+    // register pinia for example
+    // register vuetify
+    // do what ever you want
+  },
+)
 ```
 ### SECOND STEP
 Next add DirectusSSR in vite.config.ts as a plugin.
@@ -60,13 +66,15 @@ ROOT_REDIRECT=false
 ```
 
 # Dev
-You can set the environment variable `SSR_ENV`  to "development" through your directus .env / config.js / config.ts file or via cli
+You can set the environment variable `SSR_ENV`  to "development" through your directus .env / config.js / config.ts file or via cli.\
+Have fun with HMR 🔥
+
 ```bash
 SSR_ENV=development npx directus start
 ```
 
 # Build
-Like in any other vite-ssr project, extend your `package.json` with the following `vite build scripts`:
+Like in any other vite ssr project, extend your `package.json` with the following `vite build scripts`:
 
 ```json
 "scripts": {
@@ -83,4 +91,4 @@ after build - run:
 ```
 npx directus start
 ```
-easy as hell
+easy as hell 😈

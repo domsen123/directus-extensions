@@ -29,7 +29,7 @@ export default handler(App,
       { path: '/about', component: () => import('./pages/About.vue') },
     ],
   },
-  (ctx) => {
+  async (ctx) => {
     // Add your custom logic here
     // register pinia for example
     // register vuetify

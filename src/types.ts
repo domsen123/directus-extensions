@@ -82,4 +82,6 @@ export interface AppContext {
   app: App
   router: Router
   directus: AppDirectus | null
+  isClient: boolean
+  initialState: InitialState
 }

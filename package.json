@@ -12,6 +12,13 @@
     "./plugin": "./dist/vue/plugin.cjs",
     "./package.json": "./package.json"
   },
+  "typesVersions": {
+    "*": {
+      "types": [
+        "dist/types/index.d.ts"
+      ]
+    }
+  },
   "main": "dist/vue/entry-client.js",
   "types": "dist/vue/entry-client.d.ts",
   "scripts": {

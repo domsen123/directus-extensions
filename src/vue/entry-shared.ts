@@ -72,7 +72,7 @@ export const createApp: SharedHandler = async (App, options, hook) => {
   const head = createHead()
   app.use(head)
 
-  hook && await hook({ app, router, directus })
+  hook && await hook({ app, router, directus, isClient, initialState })
 
   return {
     app,

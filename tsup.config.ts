@@ -17,6 +17,17 @@ export default defineConfig(() => {
   return [
     {
       entry: {
+        index: './src/types.ts',
+      },
+      outDir: 'dist/types',
+      clean: true,
+      format: ['esm'],
+      minify: false,
+      external,
+      dts: true,
+    },
+    {
+      entry: {
         api: './src/directus/api.ts',
         app: './src/directus/app.ts',
       },

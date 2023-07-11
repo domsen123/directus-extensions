@@ -129,5 +129,5 @@ prod mode:
 pnpm app:build && pnpm app:start
 ```
 
-Got to example application: [Application](http://localhost:8080)\
-Go to directus admin dashboard: [Directus Dashboard](http://localhost:8080/admin)
+Got to example application: [Application](http://localhost:8055)\
+Go to directus admin dashboard: [Directus Dashboard](http://localhost:8055/admin)

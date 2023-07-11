@@ -3,9 +3,7 @@ import App from './App.vue'
 
 export default handler(App, {
   routes: [
-    {
-      path: '/',
-      component: () => import('./Home.vue'),
-    },
+    { path: '/', component: () => import('./pages/Home.vue') },
+    { path: '/about', component: () => import('./pages/About.vue') },
   ],
 })

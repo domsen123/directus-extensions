@@ -5,12 +5,12 @@ import { static as serveStatic } from 'express'
 import devalue from '@nuxt/devalue'
 import type { Application } from 'express'
 import type { ViteDevServer } from 'vite'
-import directusSSR from 'directus-extension-ssr/plugin'
 import type { InitialState, RenderFn, RenderResult } from '../types'
 
 export const config = defineHook(async ({ init }, { env }) => {
   init('routes.custom.after', async (ctx) => {
     const app: Application = ctx.app
+
     const isDev = env.SSR_ENV === 'development'
 
     const resolve = (p: string) => path.resolve(process.cwd(), p)
@@ -25,9 +25,6 @@ export const config = defineHook(async ({ init }, { env }) => {
         server: {
           middlewareMode: true,
         },
-        plugins: [
-          directusSSR(),
-        ],
         appType: 'custom',
       })
       app.use(vite.middlewares)

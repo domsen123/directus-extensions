@@ -15,8 +15,8 @@ npm install directus-extension-ssr
 
 # Setup Vite Project
 ### FIRST STEP
-Setup your vite project like you normaly do. (Directly in your directus self-hosted project)
-But your ```src/main.ts``` file should look simelar like this:
+Setup your vite project like you normaly do. (Directly in your directus self-hosted project).\
+But your ```src/main.ts``` file should look similar like this:
 
 ```js
 import { handler } from 'directus-extension-ssr'
@@ -32,7 +32,7 @@ export default handler(App, {
 })
 ```
 ### SECOND STEP
-Next add DirectusSSR in vite.config.ts
+Next add DirectusSSR in vite.config.ts as a plugin.
 
 ```js
 import path from 'node:path'
@@ -41,15 +41,13 @@ import Vue from '@vitejs/plugin-vue'
 import DirectusSSR from 'directus-extension-ssr/plugin'
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      '~/': `${path.resolve(__dirname, 'src')}/`,
-    },
-  },
+  [...]
   plugins: [
-    Vue(),
+    [...]
     DirectusSSR(),
+    [...]
   ],
+  [...]
 })
 ```
 ### THIRD STEP

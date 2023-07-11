@@ -8,6 +8,10 @@
       <router-link to="/about">
         About
       </router-link>
+      <div class="i-carbon-dot-mark i-scale-2" />
+      <a href="/admin">
+        Admin
+      </a>
     </div>
   </div>
 </template>

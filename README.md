@@ -65,6 +65,22 @@ ROOT_REDIRECT=false
 [...]
 ```
 
+### FOURTH STEP
+Be sure, that your index.html includes the following <!-- COMMENTS --> 
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--preload-links-->
+</head>
+<body>
+  <div id="app"><!--app-html--></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
+```
+
 # Dev
 You can set the environment variable `SSR_ENV`  to "development" through your directus .env / config.js / config.ts file or via cli.\
 Have fun with HMR 🔥

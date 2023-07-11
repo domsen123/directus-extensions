@@ -11,7 +11,7 @@ import type { InitialState, RenderFn, RenderResult } from '../types'
 export const config = defineHook(async ({ init }, { env }) => {
   init('routes.custom.after', async (ctx) => {
     const app: Application = ctx.app
-    const isDev = env.CMS_ENV === 'development'
+    const isDev = env.SSR_ENV === 'development'
 
     const resolve = (p: string) => path.resolve(process.cwd(), p)
 

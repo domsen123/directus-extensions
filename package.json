@@ -33,6 +33,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "tsup",
+    "app:bootstrap": "pnpm -r --filter @example/app exec -- npx directus bootstrap",
     "app:dev": "SSR_ENV=development pnpm -r --filter @example/app exec -- npx directus start",
     "app:build": "pnpm -r --filter @example/app build",
     "app:start": "pnpm -r --filter @example/app exec -- npx directus start"

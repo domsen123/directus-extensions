@@ -108,3 +108,28 @@ after build - run:
 npx directus start
 ```
 easy as hell 😈
+
+
+# Try it 
+```bash
+git clone git@github.com:domsen123/directus-extension-ssr.git
+cd directus-extension-ssr
+pnpm build && pnpm app:bootstrap
+```
+dev mode:
+```bash
+pnpm app:dev
+```
+
+prod mode:
+```bash
+pnpm app:build && pnpm app:start
+```
+
+Got to example application: [Application](http://localhost:8080)\
+Go to directus admin dashboard: [Directus Dashboard](http://localhost:8080/admin)
+
+### Demo Creds
+User: admin@example.com\
+Pass: passw0rd
+

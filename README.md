@@ -111,6 +111,9 @@ easy as hell 😈
 
 
 # Try it 
+
+Check out: examples/app
+
 ```bash
 git clone git@github.com:domsen123/directus-extension-ssr.git
 cd directus-extension-ssr

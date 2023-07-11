@@ -1,13 +1,11 @@
-import type { InjectionKey } from 'vue'
 import { createSSRApp } from 'vue'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { createHead } from '@vueuse/head'
 import type { IAuth } from '@directus/sdk'
 import { Directus } from '@directus/sdk'
 import type { Request } from 'express'
-import type { AppDirectus, AppTypeMap, SharedHandler } from '../types'
-
-export const DirectusKey: InjectionKey<AppDirectus> = Symbol('directus')
+import { InjectDirectus } from 'directus-extension-ssr/types'
+import { type AppDirectus, type AppTypeMap, type SharedHandler } from '../types'
 
 const getDirectus = (isClient: boolean): AppDirectus => {
   const isServer = !isClient
@@ -60,7 +58,8 @@ export const createApp: SharedHandler = async (App, options, hook) => {
   }
 
   const app = createSSRApp(App)
-  app.provide(DirectusKey, directus)
+  // app.provide(InjectDirectus, directus)
+  app.provide('directus', directus)
 
   const router = createRouter({
     history: !isClient ? createMemoryHistory() : createWebHistory(),

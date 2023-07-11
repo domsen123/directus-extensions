@@ -1,7 +1,7 @@
 import type { Directus, IAuth, TypeMap } from '@directus/sdk'
 import type { HeadClient } from '@vueuse/head'
 import type { Request, Response } from 'express'
-import type { App, Component } from 'vue'
+import type { App, Component, InjectionKey } from 'vue'
 import type { RouteRecordRaw, Router } from 'vue-router'
 
 export type Lazy<T> = () => Promise<T>
@@ -85,3 +85,5 @@ export interface AppContext {
   isClient: boolean
   initialState: InitialState
 }
+
+export const InjectDirectus: InjectionKey<AppDirectus> = Symbol('Directus')

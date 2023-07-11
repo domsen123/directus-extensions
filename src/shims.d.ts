@@ -3,3 +3,4 @@ declare interface Window {
 }
 
 declare module 'directus-extension-ssr/plugin'
+declare module 'directus-extension-ssr/types'

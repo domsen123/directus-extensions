@@ -2,10 +2,22 @@ import path from 'node:path'
 import { readFileSync } from 'node:fs'
 import { defineHook } from '@directus/extensions-sdk'
 import { static as serveStatic } from 'express'
+import ms from 'ms'
 import devalue from '@nuxt/devalue'
 import type { Application } from 'express'
 import type { ViteDevServer } from 'vite'
 import type { InitialState, RenderFn, RenderResult } from '../types'
+
+/**
+ * Safely parse human readable time format into milliseconds
+ */
+export function getMilliseconds<T>(value: unknown, fallback?: T): number | T
+export function getMilliseconds(value: unknown, fallback = undefined): number | undefined {
+  if ((typeof value !== 'string' && typeof value !== 'number') || value === '')
+    return fallback
+
+  return ms(String(value)) ?? fallback
+}
 
 export const config = defineHook(async ({ init }, { env }) => {
   init('routes.custom.after', async (ctx) => {
@@ -67,6 +79,17 @@ export const config = defineHook(async ({ init }, { env }) => {
           res,
           env,
         }) as RenderResult
+
+        if (directus && directus.storage.get('auth_refresh_token')) {
+          const cookieOptions = {
+            httpOnly: true,
+            domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
+            maxAge: getMilliseconds<number>(env.REFRESH_TOKEN_TTL),
+            secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
+            sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
+          }
+          res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directus.storage.get('auth_refresh_token'), cookieOptions)
+        }
 
         const state = {
           ...initialState,

@@ -15,8 +15,6 @@ export const handler: ClientHandler = async (App, options, hook) => {
   app.use(router)
 
   router.isReady().then(() => {
-    setTimeout(() => {
-      app.mount('#app')
-    }, 2000)
+    app.mount('#app')
   })
 }

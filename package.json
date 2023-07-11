@@ -1,0 +1,58 @@
+{
+  "name": "directus-extension-ssr",
+  "type": "module",
+  "version": "1.0.0",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "exports": {
+    ".": "./dist/vue/entry-client.js",
+    "./entry-client": "./dist/vue/entry-client.js",
+    "./entry-server": "./dist/vue/entry-server.js",
+    "./plugin": "./dist/vue/plugin.cjs",
+    "./package.json": "./package.json"
+  },
+  "main": "dist/vue/entry-client.js",
+  "types": "dist/vue/entry-client.d.ts",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "build": "tsup"
+  },
+  "directus:extension": {
+    "type": "bundle",
+    "path": {
+      "api": "dist/directus/api.js",
+      "app": "dist/directus/app.js"
+    },
+    "entries": [
+      {
+        "name": "directus-extension-ssr",
+        "type": "hook",
+        "source": ""
+      }
+    ],
+    "host": "^10.4.2"
+  },
+  "peerDependencies": {
+    "express": "^4.18.2",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.2"
+  },
+  "dependencies": {
+    "@directus/extensions-sdk": "^10.1.5",
+    "@nuxt/devalue": "^2.0.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.39.7",
+    "@directus/sdk": "^10.3.5",
+    "@directus/types": "^10.1.2",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.4.1",
+    "@vueuse/head": "^1.1.26",
+    "eslint": "^8.44.0",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.2"
+  }
+}

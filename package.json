@@ -1,7 +1,7 @@
 {
   "name": "directus-extension-ssr",
   "type": "module",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "Dominic Marx",
   "license": "ISC",
   "homepage": "https://github.com/domsen123/directus-extension-ssr",

@@ -76,8 +76,8 @@ importers:
         specifier: ^1.11.8
         version: 1.11.8
       directus:
-        specifier: ^10.4.2
-        version: 10.4.2(@types/node@20.4.1)
+        specifier: ^10.4.3
+        version: 10.4.3(@types/node@20.4.1)
       directus-extension-ssr:
         specifier: workspace:^
         version: link:../..
@@ -1578,28 +1578,28 @@ packages:
       '@babel/helper-validator-identifier': 7.22.5
       to-fast-properties: 2.0.0
 
-  /@directus/api@12.0.2(@types/node@20.4.1):
-    resolution: {integrity: sha512-9jPCk6CC9mt47rHfQZ7ka3lVRsmMJEKMIrBXPD3XPcXXXnjUijhhrGB+1nI+pRBX0cyhzPKUgkvM8J+nNIjfpw==}
+  /@directus/api@12.0.3(@types/node@20.4.1):
+    resolution: {integrity: sha512-Kji1gTNtQbOqUZi0EHuS7uWzLYcllJO7InSKvhrHDtKIY97ss8Hidh9kHwoM5ZLPfsy1rPGgEaqznQaGRXM51A==}
     engines: {node: '>=18.0.0'}
     dependencies:
       '@authenio/samlify-node-xmllint': 2.0.0(samlify@2.8.10)
       '@aws-sdk/client-ses': 3.332.0
-      '@directus/app': 10.4.2
+      '@directus/app': 10.5.0
       '@directus/constants': 10.2.1
       '@directus/errors': 0.0.1
-      '@directus/extensions-sdk': 10.1.5(@types/node@20.4.1)
+      '@directus/extensions-sdk': 10.1.6(@types/node@20.4.1)
       '@directus/format-title': 10.0.0
-      '@directus/pressure': 1.0.5
+      '@directus/pressure': 1.0.6
       '@directus/schema': 10.0.1(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
       '@directus/specs': 10.1.1
       '@directus/storage': 10.0.4
-      '@directus/storage-driver-azure': 10.0.6
-      '@directus/storage-driver-cloudinary': 10.0.6
-      '@directus/storage-driver-gcs': 10.0.6
-      '@directus/storage-driver-local': 10.0.6
-      '@directus/storage-driver-s3': 10.0.6
-      '@directus/utils': 10.0.6
-      '@directus/validation': 0.0.1
+      '@directus/storage-driver-azure': 10.0.7
+      '@directus/storage-driver-cloudinary': 10.0.7
+      '@directus/storage-driver-gcs': 10.0.7
+      '@directus/storage-driver-local': 10.0.7
+      '@directus/storage-driver-s3': 10.0.7
+      '@directus/utils': 10.0.7
+      '@directus/validation': 0.0.2
       '@godaddy/terminus': 4.12.0
       '@rollup/plugin-alias': 5.0.0(rollup@3.22.0)
       '@rollup/plugin-node-resolve': 15.0.2(rollup@3.22.0)
@@ -1763,8 +1763,8 @@ packages:
       - whiskers
     dev: false
 
-  /@directus/app@10.4.2:
-    resolution: {integrity: sha512-fhVxym3Vnsy9P9R+2rG0rc2FJzc4K2OFhM6DGq+ZoX/cQZgIEhkSSwqXwCkxfFXeWYCkh4cUzPN7phivMr+mJA==}
+  /@directus/app@10.5.0:
+    resolution: {integrity: sha512-ZpbkEN2vCx1qzc7flDqchXgUADwr5sDXzMOi4jGaVYzuZY7SAMI4rIMHv94Q40cNvBMhOrr75Do3Gow9JXUXGA==}
     dev: false
 
   /@directus/composables@10.0.6:
@@ -1772,6 +1772,19 @@ packages:
     dependencies:
       '@directus/constants': 10.2.1
       '@directus/utils': 10.0.6
+      axios: 1.4.0
+      lodash-es: 4.17.21
+      nanoid: 4.0.2
+      vue: 3.3.4
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@directus/composables@10.0.7:
+    resolution: {integrity: sha512-0ueZE8dQaIsDuE+weCgPlmSes3uh/lYbKyP9P9U28DCvUy1jfRQgK6apJua4R/BalG2paaHgH2/EOLEDpYgnzQ==}
+    dependencies:
+      '@directus/constants': 10.2.1
+      '@directus/utils': 10.0.7
       axios: 1.4.0
       lodash-es: 4.17.21
       nanoid: 4.0.2
@@ -1829,15 +1842,54 @@ packages:
       - terser
     dev: false
 
+  /@directus/extensions-sdk@10.1.6(@types/node@20.4.1):
+    resolution: {integrity: sha512-IQEWddQKE+VaRf6qFT683V88tRdX6OtB2oJvZWvFpjgXVeP4QtQMpULLMDjfp6vGIBY27DSeRwhaMx8yDUFamA==}
+    engines: {node: '>=12.20.0'}
+    hasBin: true
+    dependencies:
+      '@directus/composables': 10.0.7
+      '@directus/constants': 10.2.1
+      '@directus/types': 10.1.2
+      '@directus/utils': 10.0.7
+      '@rollup/plugin-commonjs': 25.0.0(rollup@3.22.0)
+      '@rollup/plugin-json': 6.0.0(rollup@3.22.0)
+      '@rollup/plugin-node-resolve': 15.0.2(rollup@3.22.0)
+      '@rollup/plugin-replace': 5.0.2(rollup@3.22.0)
+      '@rollup/plugin-terser': 0.4.3(rollup@3.22.0)
+      '@rollup/plugin-virtual': 3.0.1(rollup@3.22.0)
+      '@vitejs/plugin-vue': 4.2.3(vite@4.3.7)(vue@3.3.4)
+      chalk: 5.2.0
+      commander: 10.0.1
+      esbuild: 0.17.19
+      execa: 7.1.1
+      fs-extra: 11.1.1
+      inquirer: 9.2.4
+      ora: 6.3.1
+      rollup: 3.22.0
+      rollup-plugin-esbuild: 5.0.0(esbuild@0.17.19)(rollup@3.22.0)
+      rollup-plugin-styles: 4.0.0(rollup@3.22.0)
+      vite: 4.3.7(@types/node@20.4.1)
+      vue: 3.3.4
+    transitivePeerDependencies:
+      - '@types/node'
+      - debug
+      - less
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: false
+
   /@directus/format-title@10.0.0:
     resolution: {integrity: sha512-iMXP8yQb0UKAMGRHAY7IkNXEGdUqQDvlu1aAkPARYah4lMhEU8E5KgkXdOCPQaxt6Wy0gXb7DPMjeSlKyBKCxg==}
     engines: {node: '>=6.0.0'}
     dev: false
 
-  /@directus/pressure@1.0.5:
-    resolution: {integrity: sha512-qnkMxcNc+1zADO2Vp3/qZmCNtqu7VKrtrqTfOMcyIDwf4P1WrxpgnXNc/T8omOVPjRslMicX6S9s1lI3oBSp4A==}
+  /@directus/pressure@1.0.6:
+    resolution: {integrity: sha512-XE2/HUl/Sq9xHcCtR1I7AVxYUDHVpCMu2VWv3q54y3IwMpHMdS0ioj8iWVPdu5a+z/3XrDVrTRqhwVAzH/Q9kg==}
     dependencies:
-      '@directus/utils': 10.0.6
+      '@directus/utils': 10.0.7
     dev: false
 
   /@directus/schema@10.0.1(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0):
@@ -1869,52 +1921,52 @@ packages:
       openapi3-ts: 4.1.2
     dev: false
 
-  /@directus/storage-driver-azure@10.0.6:
-    resolution: {integrity: sha512-BszimZ83aYDfjvaY1LCEPwxvPrkJTcIJX6iZ0GcytTbpq7NizS+flZ0RoXvAN7G2qMlFF8/m0nqQN79/28ZeNA==}
+  /@directus/storage-driver-azure@10.0.7:
+    resolution: {integrity: sha512-konQhsXKa8fu4LWKCGuq2/O5UdqZKq9H2gVzaTSjAMid5ZDDZ3S8GLCIvX8j8D9x/QTaYTYAJzkcsm5wrRUy5g==}
     dependencies:
       '@azure/storage-blob': 12.14.0
       '@directus/storage': 10.0.4
-      '@directus/utils': 10.0.6
+      '@directus/utils': 10.0.7
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@directus/storage-driver-cloudinary@10.0.6:
-    resolution: {integrity: sha512-gxkqfHFZ7YxOuQlUh4i2F8Uwm3FGRcS9A53X9wNLeQ292jgXRvTwV+ES/+Y69IYaq5iCglgVjjk3V4JSPGUIww==}
+  /@directus/storage-driver-cloudinary@10.0.7:
+    resolution: {integrity: sha512-q6+RjFscjXfoomy6L5cmqhqYouhBzmdqaz1HJJb6/x8+rTVP5F+CdxtRyDmmBjInssHGdxutnMwY3rPgsefoNA==}
     dependencies:
       '@directus/storage': 10.0.4
-      '@directus/utils': 10.0.6
+      '@directus/utils': 10.0.7
       p-queue: 7.3.4
       undici: 5.22.1
     dev: false
 
-  /@directus/storage-driver-gcs@10.0.6:
-    resolution: {integrity: sha512-snqiO63Fmowe7moLDzofEJVlPmQiqmoYf8FIkX2gWUyD51PLz2g9aaZF2zu1q+yyVqvSefqqQuI1ChzAlS/Afw==}
+  /@directus/storage-driver-gcs@10.0.7:
+    resolution: {integrity: sha512-3lwNsK/WislmmPnf3D8sJMCV5TNwrGyCWbviVRkmedngHScbjz9agpZRovhPlwtJYFRQYav7LbTrQsn2peaiRA==}
     dependencies:
       '@directus/storage': 10.0.4
-      '@directus/utils': 10.0.6
+      '@directus/utils': 10.0.7
       '@google-cloud/storage': 6.10.1
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: false
 
-  /@directus/storage-driver-local@10.0.6:
-    resolution: {integrity: sha512-czeZ4aYuKNA16/cTpURqW+wbqG7IJaTlCG02GNfuZ9Z9J3YnJenoQZRmqJn/IqIj14AiERlpS0ysLM3WO6JADA==}
+  /@directus/storage-driver-local@10.0.7:
+    resolution: {integrity: sha512-rI04SB/KaFVF/3Mgv1OZbaYrB8Fu5mS4K4CQ9Rftc5SqxkarpWIkdu+lzf5Va6L+uwcPoWqyIoMo2PEDD8tJ3A==}
     dependencies:
       '@directus/storage': 10.0.4
-      '@directus/utils': 10.0.6
+      '@directus/utils': 10.0.7
     dev: false
 
-  /@directus/storage-driver-s3@10.0.6:
-    resolution: {integrity: sha512-A73CAkqRcM/ueurd1p2YCj4p9Pu1d6/5r/Xszurm2JdMbgLmflTE8XDhp8EradkDi8Uy/pJ9COtcG/L0+40XcQ==}
+  /@directus/storage-driver-s3@10.0.7:
+    resolution: {integrity: sha512-IBrTxh5rLCif0CgeI1GpZ5gZya9vdIc+u7fSAxqi8L8gXbCPZ6VT9FuT3Dngo3EAqyCt26YPKEh/N32CynszUw==}
     dependencies:
       '@aws-sdk/abort-controller': 3.329.0
       '@aws-sdk/client-s3': 3.332.0
       '@aws-sdk/lib-storage': 3.332.0(@aws-sdk/abort-controller@3.329.0)(@aws-sdk/client-s3@3.332.0)
       '@aws-sdk/node-http-handler': 3.344.0
       '@directus/storage': 10.0.4
-      '@directus/utils': 10.0.6
+      '@directus/utils': 10.0.7
     transitivePeerDependencies:
       - '@aws-sdk/signature-v4-crt'
       - aws-crt
@@ -1953,11 +2005,24 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /@directus/validation@0.0.1:
-    resolution: {integrity: sha512-xgOP99P/oLHi2CDB4QUZmuWs7Xj6qStI2Gx7XGcAwnYA5OVJOgUsePulct/riYpMsjbs3VISkmu5aeX4vTb9cQ==}
+  /@directus/utils@10.0.7:
+    resolution: {integrity: sha512-uqc3zaybXViZmGIoB1ZfREiTOh6PzzakY/4uGzWZBiAgKE61avDtv0/Jzoqs/0AafV/PSN82F0Nr5faF/rrcKA==}
+    dependencies:
+      '@directus/constants': 10.2.1
+      date-fns: 2.30.0
+      fs-extra: 11.1.1
+      joi: 17.9.2
+      lodash-es: 4.17.21
+      micromustache: 8.0.3
+      tmp: 0.2.1
+      vue: 3.3.4
+    dev: false
+
+  /@directus/validation@0.0.2:
+    resolution: {integrity: sha512-Dh9GDKgvWCY5EZZC5rNgbUOqSO5N3YA9NSdy18p/snj1wL/GYRXRLZFDr6xr/6WDIqcr3XQyocJr4gssNd73JQ==}
     dependencies:
       '@directus/errors': 0.0.1
-      '@directus/utils': 10.0.6
+      '@directus/utils': 10.0.7
       joi: 17.9.2
     dev: false
 
@@ -5035,12 +5100,12 @@ packages:
       path-type: 4.0.0
     dev: true
 
-  /directus@10.4.2(@types/node@20.4.1):
-    resolution: {integrity: sha512-Pl6OXd6aRZkoBic/xIuyZmZ0jXq9PUCt8s7aSlCucT+jLijMRvUSisVNck8I3LUOYm/2qeVuuch09zJWGd3tWQ==}
+  /directus@10.4.3(@types/node@20.4.1):
+    resolution: {integrity: sha512-QyfTkpl/GkUTWplcqg4M2MDQ1QW29iE3ij/k1CuaVAFrLatzOTFCfX8xS8u0TsjN3+E6B03ltLBiVWak4ouvNQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
-      '@directus/api': 12.0.2(@types/node@20.4.1)
+      '@directus/api': 12.0.3(@types/node@20.4.1)
       '@directus/update-check': 11.0.1
     transitivePeerDependencies:
       - '@aws-sdk/signature-v4-crt'
@@ -5438,7 +5503,7 @@ packages:
     dependencies:
       debug: 3.2.7
       is-core-module: 2.12.1
-      resolve: 1.22.2
+      resolve: 1.22.3
     transitivePeerDependencies:
       - supports-color
     dev: true

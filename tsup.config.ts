@@ -63,6 +63,7 @@ export default defineConfig(() => {
       target: 'esnext',
       format: ['cjs'],
       minify: false,
+      dts: true,
       external,
     },
   ]

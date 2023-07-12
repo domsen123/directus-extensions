@@ -61,7 +61,7 @@ export default defineConfig(() => {
       outDir: 'dist/vue',
       clean: false,
       target: 'esnext',
-      format: ['cjs'],
+      format: ['cjs', 'esm'],
       minify: false,
       dts: true,
       external,

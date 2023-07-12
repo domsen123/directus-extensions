@@ -4,7 +4,6 @@ import { createHead } from '@vueuse/head'
 import type { IAuth } from '@directus/sdk'
 import { Directus } from '@directus/sdk'
 import type { Request } from 'express'
-import { InjectDirectus } from 'directus-extension-ssr/types'
 import { type AppDirectus, type AppTypeMap, type SharedHandler } from '../types'
 
 const getDirectus = (isClient: boolean): AppDirectus => {

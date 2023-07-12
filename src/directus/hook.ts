@@ -80,8 +80,6 @@ export const config = defineHook(async ({ init }, { env }) => {
           env,
         }) as RenderResult
 
-        console.log(appHtml)
-
         if (directus && directus.storage.get('auth_refresh_token')) {
           const cookieOptions = {
             httpOnly: true,
@@ -103,7 +101,7 @@ export const config = defineHook(async ({ init }, { env }) => {
           .replace('<html', `<html ${htmlAttrs}`)
           .replace('<!--preload-links-->', `${preloadedLinks}\n${headTags}`)
           .replace('<!--app-html-->', appHtml)
-          .replace('<body', `<body ${bodyAttrs}`)
+          .replace('<body', `<body${bodyAttrs}`)
           .replace('</body>', `${bodyTags}\n${__INITIAL_STATE__}\n</body>`)
 
         res.removeHeader('Content-Security-Policy')

@@ -5,7 +5,6 @@ import { type UserModule } from '~/types'
 // https://pinia.vuejs.org/
 export const install: UserModule = ({ isClient, initialState, app }) => {
   const pinia = createPinia()
-  app.use(pinia)
 
   if (isClient) {
     console.log(initialState.pinia)

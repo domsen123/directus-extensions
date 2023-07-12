@@ -80,6 +80,8 @@ export const config = defineHook(async ({ init }, { env }) => {
           env,
         }) as RenderResult
 
+        console.log(appHtml)
+
         if (directus && directus.storage.get('auth_refresh_token')) {
           const cookieOptions = {
             httpOnly: true,

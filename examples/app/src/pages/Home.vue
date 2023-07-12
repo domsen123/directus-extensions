@@ -5,7 +5,7 @@
       Directus Extension SSR
     </p>
     <p class="mb-10">
-      Hi, <span class="text-primary"> {{ currentUser?.first_name }}</span> 👋 <br />
+      Hi, <span class="text-primary"> {{ userStore.currentUser?.first_name }}</span> 👋 <br />
       This is a demo of a Directus Extension SSR.
     </p>
     <div class="flex gap-2 items-center justify-center">
@@ -25,14 +25,12 @@ import { onMounted, onServerPrefetch } from 'vue'
 import { useUser } from '~/stores/user'
 import Logo from '~/assets/img/directus-ssr.png'
 
-const { currentUser, fetchCurrentUser } = useUser()
+const userStore = useUser()
 
-// if (!currentUser) fetchCurrentUser()
 onMounted(() => {
-  if (!currentUser) fetchCurrentUser()
+  userStore.fetchCurrentUser()
 })
 onServerPrefetch(async () => {
-  const user = await fetchCurrentUser(true)
-  console.log(user)
+  await userStore.fetchCurrentUser()
 })
 </script>

@@ -1,24 +1,21 @@
 import { defineStore } from 'pinia'
-import { inject, ref } from 'vue'
+import { inject } from 'vue'
 import type { AppDirectus } from 'directus-extension-ssr/types'
 
-export const useUser = defineStore('user', () => {
-  const currentUser = ref<any>(null)
-
-  const fetchCurrentUser = async (prefetch = false) => {
-    console.log('fetchCurrentUser', prefetch)
-    const directus = inject<AppDirectus>('directus')
-    try {
-      currentUser.value = await directus?.users.me.read({ fields: ['first_name'] })
-      return currentUser.value
-    }
-    catch (error: any) {
-      console.error(error.message)
-    }
-  }
-
-  return {
-    currentUser,
-    fetchCurrentUser,
-  }
+export const useUser = defineStore('user', {
+  state: () => ({
+    currentUser: null,
+  }) as { currentUser: any },
+  actions: {
+    async fetchCurrentUser() {
+      if (this.$state.currentUser) return
+      try {
+        const directus = inject<AppDirectus>('directus')
+        this.$state.currentUser = await directus?.users.me.read({ fields: ['first_name'] })
+      }
+      catch (e: any) {
+        console.error(e.message)
+      }
+    },
+  },
 })

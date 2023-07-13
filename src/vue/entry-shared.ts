@@ -1,5 +1,6 @@
 import { createSSRApp } from 'vue'
-import { Router, createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import type { Router } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { createHead } from '@vueuse/head'
 import type { IAuth } from '@directus/sdk'
 import { Directus } from '@directus/sdk'
@@ -61,11 +62,7 @@ export const createApp: SharedHandler = async (App, options, hook) => {
   app.provide('directus', directus)
 
   const defaultScrollBehavior: Router['options']['scrollBehavior'] = (to, from, savedPosition) => {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0 }
-    }
+    return savedPosition || { top: 0 }
   }
 
   const router = createRouter({

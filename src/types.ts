@@ -35,8 +35,7 @@ export type ServerHandler = (App: Component, options: UserOptions, hook?: (ctx: 
 
 export interface UserOptions {
   routes: RouteRecordRaw[]
-  layouts?: LayoutRecordRaw[]
-  components?: ComponentRecordRaw[]
+  scrollBehavior?: Router['options']['scrollBehavior']
 }
 export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void | RenderFn>
 

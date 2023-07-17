@@ -57,7 +57,7 @@ export interface RenderResult {
   appHtml: string
   preloadedLinks: string
   appParts: { headTags: string; htmlAttrs: string; bodyAttrs: string; bodyTags: string }
-  directus: AppDirectus | null
+  directus: AppDirectus
 }
 
 export interface LayoutRecordRaw {
@@ -81,7 +81,7 @@ export interface ComponentRecordRaw {
 export interface AppContext {
   app: App
   router: Router
-  directus: AppDirectus | null
+  directus: AppDirectus
   isClient: boolean
   initialState: InitialState
 }

@@ -8,6 +8,7 @@
   "keywords": [],
   "scripts": {
     "dev": "vite dev --port 5174 --host",
+    "start": "npx directus start",
     "build": "pnpm run build:client && pnpm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr src/main.ts"
@@ -17,7 +18,7 @@
     "@vueuse/core": "^10.1.2",
     "@vueuse/router": "^10.1.2",
     "dayjs": "^1.11.8",
-    "directus": "^10.4.3",
+    "directus": "^10.5.2",
     "directus-extension-ssr": "workspace:^",
     "pinia": "^2.1.3",
     "sqlite3": "^5.1.6",

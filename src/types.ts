@@ -1,4 +1,4 @@
-import type { Directus, IAuth, TypeMap } from '@directus/sdk'
+import type { AuthenticationClient, AuthenticationData, DirectusClient, GraphqlClient, RestClient, WebSocketClient } from '@directus/sdk'
 import type { HeadClient } from '@vueuse/head'
 import type { Request, Response } from 'express'
 import type { App, Component, InjectionKey } from 'vue'
@@ -10,11 +10,12 @@ type AnyItem = Record<string, any>
 
 export interface InitialState extends AnyItem {
   access_token: string | null
+  directusCredentials: AuthenticationData | null
 }
 export interface SharedResult {
   app: App
   router: Router
-  directus: AppDirectus
+  directus: AppDirectusClient
   head: HeadClient<NonNullable<unknown>>
 }
 
@@ -39,8 +40,17 @@ export interface UserOptions {
 }
 export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void | RenderFn>
 
-export interface AppTypeMap extends TypeMap {}
-export type AppDirectus = Directus<AppTypeMap, IAuth>
+export interface ExtendedAuthenticationClient extends AuthenticationClient<DirectusSchema> {
+  setCredentials: (data: AuthenticationData) => void
+  getCredentials: () => Promise<AuthenticationData>
+  setRefreshToken: (refresh_token: string | null) => Promise<void>
+  setToken: (access_token: string | null) => Promise<void>
+}
+
+type Schema = object
+
+export interface DirectusSchema extends Schema {}
+export type AppDirectusClient = DirectusClient<DirectusSchema> & ExtendedAuthenticationClient & RestClient<DirectusSchema> & GraphqlClient<DirectusSchema> & WebSocketClient<DirectusSchema>
 
 export type RenderFn = (options: RenderOptions) => Promise<RenderResult | SharedServerOptions>
 export interface RenderOptions {
@@ -56,7 +66,7 @@ export interface RenderResult {
   appHtml: string
   preloadedLinks: string
   appParts: { headTags: string; htmlAttrs: string; bodyAttrs: string; bodyTags: string }
-  directus: AppDirectus
+  directus: AppDirectusClient
 }
 
 export interface LayoutRecordRaw {
@@ -80,9 +90,9 @@ export interface ComponentRecordRaw {
 export interface AppContext {
   app: App
   router: Router
-  directus: AppDirectus
+  directus: AppDirectusClient
   isClient: boolean
   initialState: InitialState
 }
 
-export const InjectDirectus: InjectionKey<AppDirectus> = Symbol('Directus')
+export const InjectDirectus: InjectionKey<DirectusClient<DirectusSchema>> = Symbol('Directus')

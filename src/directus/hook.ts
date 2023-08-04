@@ -1,4 +1,5 @@
 import path from 'node:path'
+import process from 'node:process'
 import { readFileSync } from 'node:fs'
 import { defineHook } from '@directus/extensions-sdk'
 import { static as serveStatic } from 'express'
@@ -63,6 +64,7 @@ export const config = defineHook(async ({ init }, { env }) => {
         }
         const initialState: InitialState = {
           access_token: null,
+          directusCredentials: null,
         }
 
         const {
@@ -80,7 +82,9 @@ export const config = defineHook(async ({ init }, { env }) => {
           env,
         }) as RenderResult
 
-        if (directus && directus.storage.get('auth_refresh_token')) {
+        const directusCredentials = await directus.getCredentials()
+
+        if (directus && directusCredentials.refresh_token) {
           const cookieOptions = {
             httpOnly: true,
             domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
@@ -88,12 +92,12 @@ export const config = defineHook(async ({ init }, { env }) => {
             secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
             sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
           }
-          res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directus.storage.get('auth_refresh_token'), cookieOptions)
+          res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directusCredentials.refresh_token, cookieOptions)
         }
 
         const state = {
           ...initialState,
-          access_token: directus ? directus.storage.get('auth_token') : null,
+          directusCredentials,
         }
         const __INITIAL_STATE__ = `  <script>window.__INITIAL_STATE__ = ${devalue(state)}</script>`
 

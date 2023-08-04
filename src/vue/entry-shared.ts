@@ -1,23 +1,24 @@
+import process from 'node:process'
 import { createSSRApp } from 'vue'
 import type { Router } from 'vue-router'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { createHead } from '@vueuse/head'
-import type { IAuth } from '@directus/sdk'
-import { Directus } from '@directus/sdk'
+import { createDirectus, graphql, realtime, rest } from '@directus/sdk'
 import type { Request } from 'express'
-import { type AppDirectus, type AppTypeMap, type SharedHandler } from '../types'
+import type { AppDirectusClient, DirectusSchema, SharedHandler } from '../types'
+import { authentication } from './directus/authentication'
 
-const getDirectus = (isClient: boolean): AppDirectus => {
+const getDirectus = (isClient: boolean): AppDirectusClient => {
   const isServer = !isClient
   const PUBLIC_URL = isServer ? process.env.PUBLIC_URL as string : `${new URL(window.location.href).origin}/`
-  return new Directus<AppTypeMap, IAuth>(PUBLIC_URL, {
-    auth: {
-      mode: isServer ? 'json' : 'cookie',
-    },
-    storage: {
-      mode: isServer ? 'MemoryStorage' : 'LocalStorage',
-    },
-  })
+
+  return createDirectus<DirectusSchema>(PUBLIC_URL)
+    .with(authentication())
+    .with(rest())
+    .with(graphql())
+    .with(realtime({
+      authMode: 'public',
+    }))
 }
 
 export const getCookieValue = (req: Request, cookieName: string): string | null => {
@@ -43,18 +44,18 @@ export const createApp: SharedHandler = async (App, options, hook) => {
       const { req, env } = options
       const refresh_token = getCookieValue(req, env.REFRESH_TOKEN_COOKIE_NAME)
       if (refresh_token) {
-        directus.storage.set('auth_refresh_token', refresh_token)
-        await directus.auth.refresh()
+        await directus.setRefreshToken(refresh_token)
+        await directus.refresh()
       }
     }
     else {
-      directus.storage.set('auth_token', initialState.access_token || '')
-      if (initialState.access_token)
-        await directus.auth.refresh()
+      if (initialState.directusCredentials)
+        await directus.setCredentials(initialState.directusCredentials)
     }
   }
   catch (error: any) {
-    console.error(error.message)
+    console.error('----------------- DIRECTUS_ERROR -----------------')
+    console.error(error)
   }
 
   const app = createSSRApp(App)

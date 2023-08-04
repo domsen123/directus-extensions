@@ -5,12 +5,16 @@
       Directus Extension SSR
     </p>
     <p class="mb-10">
-      Hi, <span class="text-primary"> {{ userStore.currentUser?.first_name }}</span> 👋 <br />
+      Hi {{ userStore.currentUser?.first_name || 'Anonymous' }},
       This is a demo of a Directus Extension SSR.
     </p>
     <div class="flex gap-2 items-center justify-center">
       <router-link to="/about">
         About
+      </router-link>
+      <div class="i-carbon-dot-mark i-scale-2" />
+      <router-link to="/blog">
+        Blog
       </router-link>
       <div class="i-carbon-dot-mark i-scale-2" />
       <a href="/admin">

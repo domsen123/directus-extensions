@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-import { inject } from 'vue'
-import type { AppDirectus } from 'directus-extension-ssr/types'
+import { readMe } from '@directus/sdk'
 
 export const useUser = defineStore('user', {
   state: () => ({
@@ -10,8 +9,8 @@ export const useUser = defineStore('user', {
     async fetchCurrentUser() {
       if (this.$state.currentUser) return
       try {
-        const directus = inject<AppDirectus>('directus')
-        this.$state.currentUser = await directus?.users.me.read({ fields: ['first_name'] })
+        const currentUser = await this.directus.request(readMe({ fields: ['first_name'] }))
+        this.$state.currentUser = currentUser
       }
       catch (e: any) {
         console.error(e.message)

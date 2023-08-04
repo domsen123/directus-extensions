@@ -51,8 +51,8 @@ export const authentication = (mode: AuthenticationMode = 'json', config: Authen
       }
     }
 
-    const getCredentials = async (): Promise<AuthenticationData> => {
-      return await storage.get() as AuthenticationData
+    const getCredentials = async (): Promise<AuthenticationData | null> => {
+      return await storage.get() as AuthenticationData | null
     }
 
     const refresh = async () => {

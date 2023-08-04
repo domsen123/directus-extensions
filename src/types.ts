@@ -34,7 +34,8 @@ export type ClientHandler = (App: Component, options: UserOptions, hook?: (ctx: 
 
 export type ServerHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<RenderFn>
 
-interface RouterOptions extends Omit<Router['options'], 'history'> {
+interface RouterOptions extends Omit<Router['options'], 'history' | 'routes'> {
+  routes?: Router['options']['routes']
   extendRoutes?: (routes?: Router['options']['routes']) => Router['options']['routes']
 }
 export interface UserOptions {
@@ -45,7 +46,7 @@ export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: Ap
 
 export interface ExtendedAuthenticationClient extends AuthenticationClient<DirectusSchema> {
   setCredentials: (data: AuthenticationData) => void
-  getCredentials: () => Promise<AuthenticationData>
+  getCredentials: () => Promise<AuthenticationData | null>
   setRefreshToken: (refresh_token: string | null) => Promise<void>
   setToken: (access_token: string | null) => Promise<void>
 }

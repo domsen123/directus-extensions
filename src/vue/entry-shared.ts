@@ -59,16 +59,16 @@ export const createApp: SharedHandler = async (App, options, hook) => {
     }
   }
   catch (error: any) {
-    console.error(error)
+    // console.error(error)
   }
 
   const app = createSSRApp(App)
   // app.provide(InjectDirectus, directus)
   app.provide('directus', directus)
 
-  // @ts-expect-error ...
   const vueRouter = routerType === 'vue-router' ? await import('vue-router') : await import('vue-router/auto')
 
+  // @ts-expect-error ...
   const router = vueRouter.createRouter({
     history: !isClient ? vueRouter.createMemoryHistory() : vueRouter.createWebHistory(),
     ...routerOptions,

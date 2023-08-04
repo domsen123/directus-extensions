@@ -84,7 +84,7 @@ export const config = defineHook(async ({ init }, { env }) => {
 
         const directusCredentials = await directus.getCredentials()
 
-        if (directus && directusCredentials.refresh_token) {
+        if (directus && directusCredentials?.refresh_token) {
           const cookieOptions = {
             httpOnly: true,
             domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,

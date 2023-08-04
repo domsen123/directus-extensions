@@ -6,7 +6,7 @@
 # Directus SSR 🐰 ⚡
 Render your Vite Application next to Directus: easy as hell.
 
-`directus-extension-ssr@^2.0.0` => @directus/sdk@^11.0.0
+`directus-extension-ssr@^2.0.0` => @directus/sdk@^11.0.0\
 `directus-extension-ssr@1.0.11` => @directus/sdk@^10.3.0
 
 # Installation
@@ -27,10 +27,14 @@ import App from './App.vue'
 
 export default handler(App,
   {
-    routes: [
-      { path: '/', component: () => import('./pages/Home.vue') },
-      { path: '/about', component: () => import('./pages/About.vue') },
-    ],
+    routerType: 'vue-router', // or 'unplugin-vue-router'
+    routerOptions: {
+      routes: [
+        { path: '/', component: () => import('./pages/Home.vue') },
+        { path: '/about', component: () => import('./pages/About.vue') },
+      ],
+      // extendRoutes: () => setupLayouts(routes) => if you want to use 'unplugin-vue-router' with 'vite-plugin-vue-layouts'! But don not forget pnpm i -D vite-plugin-vue-layouts
+    }
   },
   async (ctx) => {
     // Add your custom logic here
@@ -117,18 +121,19 @@ declare module 'pinia' {
 // src/main.ts
 export default handler(App,
   {
-    routes: [
-      { path: '/', component: () => import('./pages/Home.vue') },
-      [...]
-    ],
+    routerType: 'vue-router',
+    routerOptions: {
+      routes: [
+        { path: '/', component: () => import('./pages/Home.vue') }
+      ],
+    }
   },
   async (ctx) => {
     // install all modules under `modules/`
-    Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
+    Object.values(import.meta.glob < { install: UserModule } > ('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
   },
 )
-
 
 // stores/user.ts
 export const useUser = defineStore('user', {

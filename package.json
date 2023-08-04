@@ -70,8 +70,14 @@
   "peerDependencies": {
     "@directus/sdk": "^11.0.1",
     "express": "^4.18.2",
+    "unplugin-vue-router": "^0.6.4",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"
+  },
+  "peerDependenciesMeta": {
+    "unplugin-vue-router": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@directus/extensions-sdk": "^10.1.7",
@@ -90,6 +96,7 @@
     "express": "^4.18.2",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6",
+    "unplugin-vue-router": "^0.6.4",
     "vite": "^4.4.8",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"

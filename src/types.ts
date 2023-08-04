@@ -2,7 +2,7 @@ import type { AuthenticationClient, AuthenticationData, DirectusClient, GraphqlC
 import type { HeadClient } from '@vueuse/head'
 import type { Request, Response } from 'express'
 import type { App, Component, InjectionKey } from 'vue'
-import type { RouteRecordRaw, Router } from 'vue-router'
+import type { Router } from 'vue-router'
 
 export type Lazy<T> = () => Promise<T>
 
@@ -34,9 +34,12 @@ export type ClientHandler = (App: Component, options: UserOptions, hook?: (ctx: 
 
 export type ServerHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<RenderFn>
 
+interface RouterOptions extends Omit<Router['options'], 'history'> {
+  extendRoutes?: (routes?: Router['options']['routes']) => Router['options']['routes']
+}
 export interface UserOptions {
-  routes: RouteRecordRaw[]
-  scrollBehavior?: Router['options']['scrollBehavior']
+  routerType?: 'vue-router' | 'unplugin-vue-router'
+  routerOptions: RouterOptions
 }
 export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void | RenderFn>
 

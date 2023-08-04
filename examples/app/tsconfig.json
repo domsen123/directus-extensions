@@ -16,8 +16,9 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "types": [
-      "vite/client",
-      "@directus/types"
+      "@directus/types",
+      "vite-plugin-vue-layouts/client",
+      "vite/client"
     ],
     "paths": {
       "~/*": ["src/*"]

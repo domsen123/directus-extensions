@@ -38,3 +38,11 @@ onServerPrefetch(async () => {
   await blogStore.fetchBlogs()
 })
 </script>
+
+<route>
+{
+  meta: {
+    layout: 'blog'
+  }
+}
+</route>

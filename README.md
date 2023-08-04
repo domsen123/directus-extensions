@@ -6,6 +6,9 @@
 # Directus SSR 🐰 ⚡
 Render your Vite Application next to Directus: easy as hell.
 
+`directus-extension-ssr@^2.0.0` => @directus/sdk@^11.0.0
+`directus-extension-ssr@1.0.11` => @directus/sdk@^10.3.0
+
 # Installation
 Install `directus-extension-ssr` into your self-hosted [directus](https://directus.io/) instance.
 ```bash

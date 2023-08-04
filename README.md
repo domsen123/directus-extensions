@@ -80,6 +80,66 @@ Be sure, that your index.html includes the following COMMENTS (--app-html-- and 
 </body>
 </html>
 ```
+# Inject Directus
+
+Just use `inject('directus')` anywhere in setup function.
+
+# Pinia
+If you want to use Pinia, do something like that:
+
+```js
+// src/modules/pinia.ts
+export const install: UserModule = ({ isClient, initialState, directus, app }) => {
+  const pinia = createPinia()
+
+  pinia.use(({ store }) => {
+    store.directus = directus
+  })
+
+  app.use(pinia)
+
+  if (isClient)
+    pinia.state.value = (initialState.pinia) || {}
+
+  else initialState.pinia = pinia.state.value
+}
+
+
+// src/main.ts
+export default handler(App,
+  {
+    routes: [
+      { path: '/', component: () => import('./pages/Home.vue') },
+      [...]
+    ],
+  },
+  async (ctx) => {
+    // install all modules under `modules/`
+    Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
+      .forEach(i => i.install?.(ctx))
+  },
+)
+
+
+// stores/user.ts
+export const useUser = defineStore('user', {
+  state: () => ({
+    currentUser: null,
+  }) as { currentUser: any },
+  actions: {
+    async fetchCurrentUser() {
+      if (this.$state.currentUser) return
+      try {
+        const currentUser = await this.directus.request(readMe({ fields: ['first_name'] }))
+        this.$state.currentUser = currentUser
+      }
+      catch (e: any) {
+        console.error(e.message)
+      }
+    },
+  },
+})
+```
 
 # Dev
 You can set the environment variable `SSR_ENV`  to "development" through your directus .env / config.js / config.ts file or via cli.\

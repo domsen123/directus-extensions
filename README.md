@@ -104,6 +104,12 @@ export const install: UserModule = ({ isClient, initialState, directus, app }) =
   else initialState.pinia = pinia.state.value
 }
 
+// src/pinia.d.ts
+declare module 'pinia' {
+  export interface PiniaCustomProperties {
+    directus: import('directus-extension-ssr/types').AppDirectusClient
+  }
+}
 
 // src/main.ts
 export default handler(App,

@@ -190,7 +190,6 @@ export const authentication = (mode: AuthenticationMode = 'json', config: Authen
             expires_at: null,
           }
         }
-        console.log('setRefreshToken', data)
         await storage.set(data)
       },
     }

@@ -46,6 +46,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "tsup",
+    "_publish": "pnpm build && npm publish",
     "app:spa": "pnpm -r --filter @example/app exec -- vite dev --port 1337",
     "app:bootstrap": "pnpm -r --filter @example/app exec -- npx directus bootstrap",
     "app:dev": "SSR_ENV=development pnpm -r --filter @example/app exec -- npx directus start",

@@ -3,6 +3,7 @@ import { defineConfig } from 'tsup'
 // @ts-expect-error stfu!
 export default defineConfig(() => {
   const external = [
+    '@vueuse/head',
     '@directus/sdk',
     '@directus/shared',
     '@directus/types',
@@ -12,6 +13,7 @@ export default defineConfig(() => {
     'vite',
     'vue',
     'vue-router',
+    'unplugin-vue-router',
   ]
 
   return [
@@ -22,7 +24,7 @@ export default defineConfig(() => {
       outDir: 'dist/types',
       clean: false,
       format: ['esm'],
-      minify: true,
+      minify: false,
       external,
       dts: true,
     },
@@ -62,7 +64,7 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['cjs', 'esm'],
-      minify: false,
+      minify: true,
       dts: true,
       external,
     },

@@ -18,6 +18,9 @@ export default (): Plugin => {
           assetsDir: '$assets',
           target: 'esnext',
         },
+        optimizeDeps: {
+          exclude: ['vue-router/auto'],
+        },
       }
     },
     resolveId(source) {

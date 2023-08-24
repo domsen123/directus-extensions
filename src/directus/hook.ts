@@ -7,6 +7,7 @@ import ms from 'ms'
 import devalue from '@nuxt/devalue'
 import type { Application } from 'express'
 import type { ViteDevServer } from 'vite'
+import type { AuthenticationData } from '@directus/sdk'
 import type { InitialState, RenderFn, RenderResult } from '../types'
 
 /**
@@ -82,17 +83,24 @@ export const config = defineHook(async ({ init }, { env }) => {
           env,
         }) as RenderResult
 
-        const directusCredentials = await directus.getCredentials()
+        let directusCredentials: AuthenticationData | null = null
 
-        if (directus && directusCredentials?.refresh_token) {
-          const cookieOptions = {
-            httpOnly: true,
-            domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
-            maxAge: getMilliseconds<number>(env.REFRESH_TOKEN_TTL),
-            secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
-            sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
+        try {
+          directusCredentials = await directus.getCredentials()
+
+          if (directus && directusCredentials?.refresh_token) {
+            const cookieOptions = {
+              httpOnly: true,
+              domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
+              maxAge: getMilliseconds<number>(env.REFRESH_TOKEN_TTL),
+              secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
+              sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
+            }
+            res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directusCredentials.refresh_token, cookieOptions)
           }
-          res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directusCredentials.refresh_token, cookieOptions)
+        }
+        catch (error: any) {
+
         }
 
         const state = {

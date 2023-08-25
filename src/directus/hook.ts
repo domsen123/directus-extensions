@@ -10,6 +10,39 @@ import type { ViteDevServer } from 'vite'
 import type { AuthenticationData } from '@directus/sdk'
 import type { InitialState, RenderFn, RenderResult } from '../types'
 
+const DIRECTUS_ROUTES = [
+  '/server/ping',
+  '/admin',
+  '/auth',
+  '/graphql',
+  '/activity',
+  '/assets',
+  '/collections',
+  '/dashboards',
+  '/extensions',
+  '/fields',
+  '/files',
+  '/flows',
+  '/folders',
+  '/items',
+  '/notifications',
+  '/operations',
+  '/panels',
+  '/permissions',
+  '/presets',
+  '/translations',
+  '/relations',
+  '/revisions',
+  '/roles',
+  '/schema',
+  '/server',
+  '/settings',
+  '/shares',
+  '/users',
+  '/utils',
+  '/webhooks',
+]
+
 /**
  * Safely parse human readable time format into milliseconds
  */
@@ -47,7 +80,8 @@ export const config = defineHook(async ({ init }, { env }) => {
       app.use(serveStatic(resolve('dist/client'), { index: false }))
     }
 
-    app.use('*', async (req, res) => {
+    app.use('*', async (req, res, next) => {
+      if (DIRECTUS_ROUTES.includes(req.originalUrl)) return next()
       try {
         const url = req.originalUrl
 
@@ -98,9 +132,13 @@ export const config = defineHook(async ({ init }, { env }) => {
             }
             res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directusCredentials.refresh_token, cookieOptions)
           }
+          else {
+            res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
+          }
         }
         catch (error: any) {
-
+          res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
+          console.log('hook', error)
         }
 
         const state = {
@@ -123,8 +161,8 @@ export const config = defineHook(async ({ init }, { env }) => {
       }
       catch (error: any) {
         vite && vite.ssrFixStacktrace(error)
-        console.error(error)
-        res.status(500).send(error.stack)
+        console.error('global-error', error)
+        res.status(500).send(error.stack || error)
       }
     })
   })

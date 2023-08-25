@@ -1,8 +1,8 @@
 import { handler } from 'directus-extension-ssr'
 import { setupLayouts } from 'virtual:generated-layouts'
-import { routes } from 'vue-router/auto/routes'
 import App from './App.vue'
 import type { UserModule } from './types'
+import routes from '~pages'
 
 import '@unocss/reset/tailwind-compat.css'
 import 'uno.css'
@@ -11,7 +11,7 @@ export default handler(App,
   {
     routerType: 'unplugin-vue-router',
     routerOptions: {
-      extendRoutes: () => setupLayouts(routes),
+      routes: setupLayouts(routes),
     },
   },
   async (ctx) => {

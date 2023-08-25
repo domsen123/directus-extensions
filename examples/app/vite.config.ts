@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import DirectusSSR from 'directus-extension-ssr/plugin'
 import Unocss from 'unocss/vite'
-import VueRouter from 'unplugin-vue-router/vite'
+import Pages from 'vite-plugin-pages'
 
 import Layouts from 'vite-plugin-vue-layouts'
 
@@ -14,11 +14,8 @@ export default defineConfig({
     },
   },
   plugins: [
-    VueRouter({
-      routesFolder: ['src/pages'],
-      dts: './src/typed-router.d.ts',
-    }),
     Vue(),
+    Pages(),
     Layouts(),
     DirectusSSR(),
     Unocss(),

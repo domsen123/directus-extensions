@@ -1,6 +1,6 @@
 import process from 'node:process'
 import { createSSRApp } from 'vue'
-import type { Router } from 'vue-router'
+import { type Router, createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { createHead } from '@vueuse/head'
 import { createDirectus, graphql, realtime, rest } from '@directus/sdk'
 import type { Request } from 'express'
@@ -38,7 +38,7 @@ const scrollBehavior: Router['options']['scrollBehavior'] = (_, __, savedPositio
 }
 
 export const createApp: SharedHandler = async (App, options, hook) => {
-  const { isClient, initialState, routerOptions, routerType = 'vue-router' } = options
+  const { isClient, initialState, routerOptions } = options
 
   routerOptions.scrollBehavior ??= scrollBehavior
 
@@ -59,18 +59,17 @@ export const createApp: SharedHandler = async (App, options, hook) => {
     }
   }
   catch (error: any) {
-    // console.error(error)
+    await directus.setCredentials({ access_token: null, refresh_token: null, expires: null, expires_at: null })
+    console.error('entry-shared', error)
   }
 
   const app = createSSRApp(App)
   // app.provide(InjectDirectus, directus)
   app.provide('directus', directus)
 
-  const vueRouter = routerType === 'vue-router' ? await import('vue-router') : await import('vue-router/auto')
-
   // @ts-expect-error ...
-  const router = vueRouter.createRouter({
-    history: !isClient ? vueRouter.createMemoryHistory() : vueRouter.createWebHistory(),
+  const router = createRouter({
+    history: !isClient ? createMemoryHistory() : createWebHistory(),
     ...routerOptions,
   })
 

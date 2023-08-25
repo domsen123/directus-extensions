@@ -69,10 +69,19 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
     directus,
   } = await createApp(App, sharedServerOptions, hook)
 
+  router.beforeEach((to) => {
+    to.meta.state = initialState || null
+  })
+
   app.use(router)
   router.push(url)
 
   await router.isReady()
+
+  Object.assign(
+    initialState || {},
+    (router.currentRoute.value.meta || {}).state || {},
+  )
 
   const ctx: any = {}
   const appHtml = await renderToString(app, ctx)

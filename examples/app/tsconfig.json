@@ -18,6 +18,7 @@
     "types": [
       "@directus/types",
       "vite-plugin-vue-layouts/client",
+      "vite-plugin-pages/client",
       "vite/client"
     ],
     "paths": {

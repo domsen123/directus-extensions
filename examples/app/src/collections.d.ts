@@ -1,18 +1,14 @@
 import 'pinia'
-import 'directus-extension-ssr/types'
+import { AppDirectusClient } from 'directus-extension-ssr/types'
 
 declare module 'directus-extension-ssr/types' {
   interface DirectusSchema {
-    posts: {
-      id: string | number
-      title: string
-      content: string
-    }[]
+    posts: any[]
   }
 }
 
 declare module 'pinia' {
   export interface PiniaCustomProperties {
-    directus: import('directus-extension-ssr/types').AppDirectusClient
+    directus: AppDirectusClient
   }
 }

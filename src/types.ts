@@ -51,9 +51,7 @@ export interface ExtendedAuthenticationClient extends AuthenticationClient<Direc
   setToken: (access_token: string | null) => Promise<void>
 }
 
-type Schema = object
-
-export interface DirectusSchema extends Schema {}
+export interface DirectusSchema {}
 export type AppDirectusClient = DirectusClient<DirectusSchema> & ExtendedAuthenticationClient & RestClient<DirectusSchema> & GraphqlClient<DirectusSchema> & WebSocketClient<DirectusSchema>
 
 export type RenderFn = (options: RenderOptions) => Promise<RenderResult | SharedServerOptions>

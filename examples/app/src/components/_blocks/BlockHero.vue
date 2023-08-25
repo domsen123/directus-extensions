@@ -1,14 +1,59 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useAuth } from '~/services/useAuth'
 
 const currentAction = ref<string | null>(null)
+
+const isSignUpLoading = ref(false)
+const isSignInLoading = ref(false)
+
+const payload = reactive({
+  first_name: 'Dominic',
+  last_name: 'Marx',
+  email: 'dmarx@marxulm.de',
+  password: 'lala4712',
+})
+const authStore = useAuth()
+const onSignUp = async () => {
+  try {
+    isSignUpLoading.value = true
+    await authStore.signUp(
+      payload.first_name,
+      payload.last_name,
+      payload.email,
+      payload.password,
+    )
+  }
+  catch (error: any) {
+    console.error(error)
+  }
+  finally {
+    isSignUpLoading.value = false
+  }
+}
+const onSignIn = async () => {
+  console.log('onSignIn')
+  try {
+    isSignInLoading.value = true
+    await authStore.signIn(
+      payload.email,
+      payload.password,
+    )
+  }
+  catch (error: any) {
+    console.error(error)
+  }
+  finally {
+    isSignInLoading.value = false
+  }
+}
 </script>
 
 <template>
   <v-sheet theme="dark">
     <v-container class="py-36">
       <v-row>
-        <v-col cols="12" lg="8">
+        <v-col cols="12" lg="7">
           <div class="prose">
             <h1 class="font-medium leading-12">
               Create SSR-Rendered Directus <span class="whitespace-nowrap">Web-Applications</span> in no time.
@@ -21,8 +66,8 @@ const currentAction = ref<string | null>(null)
             </v-btn>
           </div>
         </v-col>
-        <v-col cols="12" lg="4">
-          <v-card rounded="0" theme="light">
+        <v-col cols="12" lg="5">
+          <v-card v-if="!authStore.currentUser" rounded="0" theme="light">
             <v-tabs v-model="currentAction">
               <v-tab value="sign-up">
                 Sign Up
@@ -31,22 +76,29 @@ const currentAction = ref<string | null>(null)
                 Sign In
               </v-tab>
             </v-tabs>
-            <v-card-text class="p-8">
-              <v-window v-model="currentAction">
+            <v-card-text>
+              <v-window v-model="currentAction" class="py-2">
                 <v-window-item value="sign-up">
-                  <v-text-field label="Name" variant="outlined" />
-                  <v-text-field label="Email" variant="outlined" />
-                  <v-text-field label="Password" variant="outlined" />
-                  <v-btn color="primary" size="large" variant="flat" block>
-                    Sign Up
-                  </v-btn>
+                  <v-form @submit.prevent="onSignUp">
+                    <div class="flex gap-2">
+                      <v-text-field v-model="payload.first_name" class="flex-1 flex-shrink-0" label="Firstname" variant="outlined" density="comfortable" required />
+                      <v-text-field v-model="payload.last_name" class="flex-1 flex-shrink-0" label="Lastname" variant="outlined" density="comfortable" required />
+                    </div>
+                    <v-text-field v-model="payload.email" label="Email" variant="outlined" density="comfortable" required />
+                    <mrx-password-field v-model="payload.password" label="Password" variant="outlined" density="comfortable" required />
+                    <v-btn type="submit" color="primary" size="large" variant="flat" block :loading="isSignUpLoading">
+                      Sign Up
+                    </v-btn>
+                  </v-form>
                 </v-window-item>
                 <v-window-item value="sign-in">
-                  <v-text-field label="Email" variant="outlined" />
-                  <v-text-field label="Password" variant="outlined" />
-                  <v-btn color="primary" size="large" variant="flat" block>
-                    Sign In
-                  </v-btn>
+                  <v-form @submit.prevent="onSignIn">
+                    <v-text-field v-model="payload.email" label="Email" variant="outlined" density="comfortable" />
+                    <mrx-password-field v-model="payload.password" label="Password" variant="outlined" density="comfortable" />
+                    <v-btn type="submit" color="primary" size="large" variant="flat" block :loading="isSignInLoading">
+                      Sign In
+                    </v-btn>
+                  </v-form>
                 </v-window-item>
               </v-window>
             </v-card-text>

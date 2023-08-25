@@ -1,5 +1,5 @@
-import type { AuthenticationConfig, AuthenticationData, AuthenticationMode, DirectusClient } from '@directus/sdk'
-import { memoryStorage } from '@directus/sdk'
+import type { AuthenticationConfig, AuthenticationData, AuthenticationMode, DirectusClient, loginOptions } from '@directus/sdk'
+import { authentication as _authentication, memoryStorage } from '@directus/sdk'
 import type { DirectusSchema, ExtendedAuthenticationClient } from '../../types'
 import { getRequestUrl } from './get-request-url'
 import { request } from './request'
@@ -17,6 +17,7 @@ const defaultConfigValues = {
  *
  * @returns A Directus authentication client.
  */
+
 export const authentication = (mode: AuthenticationMode = 'json', config: AuthenticationConfig = {}) => {
   return (client: DirectusClient<DirectusSchema>): ExtendedAuthenticationClient => {
     config = { ...defaultConfigValues, ...config }
@@ -38,6 +39,7 @@ export const authentication = (mode: AuthenticationMode = 'json', config: Authen
       storage.set(data)
 
       if (autoRefresh && expires > msRefreshBeforeExpires && expires < Number.MAX_SAFE_INTEGER) {
+        // @ts-expect-error ...
         if (refreshTimeout) clearTimeout(refreshTimeout)
 
         refreshTimeout = setTimeout(() => {
@@ -120,18 +122,23 @@ export const authentication = (mode: AuthenticationMode = 'json', config: Authen
       setCredentials,
       getCredentials,
       refresh,
-      async login(email: string, password: string) {
+      async login(email: string, password: string, options: loginOptions = {}) {
         // TODO: allow for websocket only authentication
         resetStorage()
 
-        const requestUrl = getRequestUrl(client.url, '/auth/login')
+        const authPath = options.provider ? `/auth/login/${options.provider}` : '/auth/login'
+        const requestUrl = getRequestUrl(client.url, authPath)
+
+        const authData: Record<string, string | undefined> = { email, password }
+        if ('otp' in options) authData.otp = options.otp
+        if ('mode' in options) authData.mode = options.mode
 
         const data = await request<AuthenticationData>(requestUrl.toString(), {
           method: 'POST',
-          body: JSON.stringify({
-            email,
-            password,
-          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(authData),
         })
 
         setCredentials(data)
@@ -142,6 +149,9 @@ export const authentication = (mode: AuthenticationMode = 'json', config: Authen
 
         const options: RequestInit = {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
 
         if (mode === 'json' && authData?.refresh_token) {
@@ -153,6 +163,7 @@ export const authentication = (mode: AuthenticationMode = 'json', config: Authen
         const requestUrl = getRequestUrl(client.url, '/auth/logout')
         await request(requestUrl.toString(), options, null)
 
+        // @ts-expect-error ...
         if (refreshTimeout) clearTimeout(refreshTimeout)
         resetStorage()
       },

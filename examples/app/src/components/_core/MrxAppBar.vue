@@ -6,7 +6,7 @@
   <v-app-bar scroll-behavior="elevate" theme="dark">
     <v-container class="flex">
       <div class="uppercase">
-        GLOBING
+        <span class="text-primary font-bold">directus</span>extension<span class="text-primary font-bold">ssr</span>
       </div>
     </v-container>
   </v-app-bar>

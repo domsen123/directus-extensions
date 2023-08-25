@@ -81,88 +81,94 @@ export const config = defineHook(async ({ init }, { env }) => {
     }
 
     app.use('*', async (req, res, next) => {
-      if (DIRECTUS_ROUTES.includes(req.originalUrl)) return next()
-      try {
-        const url = req.originalUrl
-
-        let template: string
-        let render: RenderFn
-
-        if (isDev) {
-          template = readFileSync(resolve('index.html'), 'utf-8')
-          template = await vite.transformIndexHtml(url, template)
-          render = await (await vite.ssrLoadModule('/src/main.ts')).default
-        }
-        else {
-          template = indexProd
-          render = await (await import(resolve('dist/server/main.mjs'))).default
-        }
-        const initialState: InitialState = {
-          access_token: null,
-          directusCredentials: null,
-        }
-
-        const {
-          appHtml,
-          preloadedLinks,
-          appParts: { headTags, htmlAttrs, bodyAttrs, bodyTags },
-          directus,
-        } = await render({
-          skipRender: false,
-          url,
-          manifest,
-          initialState,
-          req,
-          res,
-          env,
-        }) as RenderResult
-
-        let directusCredentials: AuthenticationData | null = null
-
+      if (
+        DIRECTUS_ROUTES.includes(req.originalUrl)
+        || req.method !== 'GET'
+      ) {
+        return next()
+      }
+      else {
         try {
-          directusCredentials = await directus.getCredentials()
+          const url = req.originalUrl
 
-          if (directus && directusCredentials?.refresh_token) {
-            const cookieOptions = {
-              httpOnly: true,
-              domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
-              maxAge: getMilliseconds<number>(env.REFRESH_TOKEN_TTL),
-              secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
-              sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
-            }
-            res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directusCredentials.refresh_token, cookieOptions)
+          let template: string
+          let render: RenderFn
+
+          if (isDev) {
+            template = readFileSync(resolve('index.html'), 'utf-8')
+            template = await vite.transformIndexHtml(url, template)
+            render = await (await vite.ssrLoadModule('/src/main.ts')).default
           }
           else {
+            template = indexProd
+            render = await (await import(resolve('dist/server/main.mjs'))).default
+          }
+          const initialState: InitialState = {
+            access_token: null,
+            directusCredentials: null,
+          }
+
+          const {
+            appHtml,
+            preloadedLinks,
+            appParts: { headTags, htmlAttrs, bodyAttrs, bodyTags },
+            directus,
+          } = await render({
+            skipRender: false,
+            url,
+            manifest,
+            initialState,
+            req,
+            res,
+            env,
+          }) as RenderResult
+
+          let directusCredentials: AuthenticationData | null = null
+
+          try {
+            directusCredentials = await directus.getCredentials()
+
+            if (directus && directusCredentials?.refresh_token) {
+              const cookieOptions = {
+                httpOnly: true,
+                domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
+                maxAge: getMilliseconds<number>(env.REFRESH_TOKEN_TTL),
+                secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
+                sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
+              }
+              res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directusCredentials.refresh_token, cookieOptions)
+            }
+            else {
+              res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
+            }
+          }
+          catch (error: any) {
             res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
           }
+
+          const state = {
+            ...initialState,
+            directusCredentials,
+          }
+          const __INITIAL_STATE__ = `  <script>window.__INITIAL_STATE__ = ${devalue(state)}</script>`
+
+          const html = template
+            .replace('<html', `<html ${htmlAttrs}`)
+            .replace('<!--preload-links-->', `${preloadedLinks}\n${headTags}`)
+            .replace('<!--app-html-->', appHtml)
+            .replace('<body', `<body${bodyAttrs}`)
+            .replace('</body>', `${bodyTags}\n${__INITIAL_STATE__}\n</body>`)
+
+          res.removeHeader('Content-Security-Policy')
+          res.status(200).set({
+            'Content-Type': 'text/html',
+          }).end(html)
         }
         catch (error: any) {
-          res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
-          console.log('hook', error)
+          vite && vite.ssrFixStacktrace(error)
+          console.error('global-error', error)
+          res.status(500).send(error.stack || error)
         }
-
-        const state = {
-          ...initialState,
-          directusCredentials,
-        }
-        const __INITIAL_STATE__ = `  <script>window.__INITIAL_STATE__ = ${devalue(state)}</script>`
-
-        const html = template
-          .replace('<html', `<html ${htmlAttrs}`)
-          .replace('<!--preload-links-->', `${preloadedLinks}\n${headTags}`)
-          .replace('<!--app-html-->', appHtml)
-          .replace('<body', `<body${bodyAttrs}`)
-          .replace('</body>', `${bodyTags}\n${__INITIAL_STATE__}\n</body>`)
-
-        res.removeHeader('Content-Security-Policy')
-        res.status(200).set({
-          'Content-Type': 'text/html',
-        }).end(html)
-      }
-      catch (error: any) {
-        vite && vite.ssrFixStacktrace(error)
-        console.error('global-error', error)
-        res.status(500).send(error.stack || error)
       }
     })
   })

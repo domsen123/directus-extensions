@@ -2,11 +2,11 @@
   <div class="text-center text-gray-700 px-4 py-10">
     <img :src="Logo" alt="Directus Extension SSR Logo" width="200" class="mx-auto" />
     <p class="font-bold mb-3">
-      Directus Extension SSR
+      This is a very secret page - only for authorized users
     </p>
     <p class="mb-10">
       Hi {{ userStore.currentUser?.first_name || 'Anonymous' }},
-      This is a demo of a Directus Extension SSR.
+      Welcome to the secret page.
     </p>
     <navigation />
   </div>
@@ -26,3 +26,8 @@ onServerPrefetch(async () => {
   await userStore.fetchCurrentUser()
 })
 </script>
+
+<route lang="yaml">
+meta:
+  auth: redirect
+</route>

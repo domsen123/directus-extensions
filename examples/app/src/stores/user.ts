@@ -13,7 +13,7 @@ export const useUser = defineStore('user', {
         this.$state.currentUser = currentUser
       }
       catch (e: any) {
-        console.error(e.message)
+        // console.error(e)
       }
     },
   },

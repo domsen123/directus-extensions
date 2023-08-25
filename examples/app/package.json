@@ -14,11 +14,11 @@
     "build:server": "vite build --outDir dist/server --ssr src/main.ts"
   },
   "dependencies": {
-    "@unocss/reset": "^0.54.1",
+    "@unocss/reset": "^0.55.2",
     "@vueuse/core": "^10.3.0",
     "@vueuse/router": "^10.3.0",
     "dayjs": "^1.11.9",
-    "directus": "^10.5.2",
+    "directus": "^10.5.3",
     "directus-extension-ssr": "workspace:^",
     "pinia": "^2.1.6",
     "sqlite3": "^5.1.6",
@@ -26,18 +26,20 @@
     "vue-router": "^4.2.4"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.40.0",
-    "@iconify-json/carbon": "^1.1.18",
-    "@types/node": "^20.4.7",
-    "@unocss/eslint-config": "^0.54.1",
-    "@vitejs/plugin-vue": "^4.2.3",
-    "eslint": "^8.46.0",
-    "typescript": "^5.1.6",
-    "unocss": "^0.54.1",
+    "@antfu/eslint-config": "^0.41.0",
+    "@iconify-json/carbon": "^1.1.20",
+    "@types/node": "^20.5.6",
+    "@unocss/eslint-config": "^0.55.2",
+    "@vitejs/plugin-vue": "^4.3.3",
+    "eslint": "^8.47.0",
+    "typescript": "^5.2.2",
+    "unocss": "^0.55.2",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.1",
-    "vite": "^4.4.8",
+    "vite": "^4.4.9",
     "vite-plugin-pages": "^0.31.0",
-    "vite-plugin-vue-layouts": "^0.8.0"
+    "vite-plugin-pages-sitemap": "^1.6.1",
+    "vite-plugin-vue-layouts": "^0.8.0",
+    "vite-plugin-webfont-dl": "^3.7.6"
   }
 }

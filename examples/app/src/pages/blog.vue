@@ -13,15 +13,7 @@
       </div>
     </div>
 
-    <div class="flex gap-2 items-center justify-center">
-      <router-link to="/">
-        Back to Home
-      </router-link>
-      <div class="i-carbon-dot-mark i-scale-2" />
-      <a href="/admin">
-        Admin
-      </a>
-    </div>
+    <navigation />
   </div>
 </template>
 

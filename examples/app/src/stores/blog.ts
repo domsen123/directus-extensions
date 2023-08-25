@@ -14,7 +14,7 @@ export const useBlog = defineStore('blog', {
         this.$state.blogList = result
       }
       catch (e: any) {
-        console.error(e.message)
+        console.error(e)
       }
     },
   },

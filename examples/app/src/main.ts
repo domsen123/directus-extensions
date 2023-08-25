@@ -5,7 +5,8 @@ import App from './App.vue'
 import type { UserModule } from './types'
 import routes from '~pages'
 
-import '@unocss/reset/tailwind-compat.css'
+// import '@unocss/reset/tailwind-compat.css'
+import '~/assets/styles/main.css'
 import 'uno.css'
 
 export default handler(App,
@@ -23,7 +24,7 @@ export default handler(App,
     ctx.router.beforeEach(async (to) => {
       if (to.meta.auth) {
         try {
-          await ctx.directus.request(readMe({ fields: ['id', 'role.id', 'role.admin_access'] }))
+          await ctx.directus.request(readMe({ fields: ['id'] }))
         }
         catch (e: any) {
           if (e.errors.some((err: any) => err.extensions.code === 'INVALID_CREDENTIALS')) {

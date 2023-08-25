@@ -15,9 +15,6 @@
     "antfu/top-level-function": "off",
     "antfu/if-newline": "off",
     "no-console": "off",
-    "vue/component-tags-order": ["error", {
-      "order": [["template", "script"], "style"]
-    }],
     "vue/html-self-closing": ["error", {
       "html": {
         "void": "any",

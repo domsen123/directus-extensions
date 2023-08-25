@@ -9,6 +9,7 @@ import Pages from 'vite-plugin-pages'
 import WebfontDownload from 'vite-plugin-webfont-dl'
 import Layouts from 'vite-plugin-vue-layouts'
 import generateSitemap from 'vite-plugin-pages-sitemap'
+import Vuetify from 'vite-plugin-vuetify'
 
 export default defineConfig({
   server: {
@@ -24,6 +25,7 @@ export default defineConfig({
   plugins: [
     Vue(),
     Pages({
+      dirs: ['src/views'],
       onRoutesGenerated: routes => generateSitemap({ routes }),
     }),
     Layouts(),
@@ -52,5 +54,9 @@ export default defineConfig({
       include: [/\.vue$/, /\.vue\?vue/],
       dts: 'src/components.d.ts',
     }),
+    Vuetify({ styles: { configFile: 'src/assets/scss/settings.scss' } }),
   ],
+  ssr: {
+    noExternal: [/vuetify/],
+  },
 })

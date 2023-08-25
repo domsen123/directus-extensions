@@ -3,7 +3,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "typescript.preferences.autoImportFileExcludePatterns": ["vue-router"],
+  "scss.lint.unknownAtRules": "ignore",
   "unocss.root": "examples/app",
   "files.exclude": {
     "**/.git": true,

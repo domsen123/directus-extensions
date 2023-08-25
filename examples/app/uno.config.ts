@@ -16,7 +16,8 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      primary: 'rgb(98, 0, 238)',
+      primary: '#FF546C',
+      secondary: '#8FFFEC',
     },
   },
   presets: [
@@ -27,11 +28,7 @@ export default defineConfig({
     }),
     presetTypography(),
     presetWebFonts({
-      fonts: {
-        sans: 'DM Sans',
-        serif: 'DM Serif Display',
-        mono: 'DM Mono',
-      },
+      fonts: { sans: 'Mulish:300,400,500,600,700,800,900' },
     }),
   ],
   transformers: [

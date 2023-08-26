@@ -23,9 +23,9 @@ import DirectusLogo from '~/assets/img/logos/directus.svg'
           <div class="flex-1 prose">
             <h3>Directus installs on top of any SQL database</h3>
             <p>You remain in complete control of your new or existing database. No need to migrate to a proprietary data model, so there's no vendor lock-in.</p>
-            <v-btn rounded="xl" variant="flat" color="primary" size="large" class="mt-4 px-8">
+            <!-- <v-btn rounded="xl" variant="flat" color="primary" size="large" class="mt-4 px-8">
               see supported SQL vendors
-            </v-btn>
+            </v-btn> -->
           </div>
         </div>
         <div class="flex items-center gap-10">

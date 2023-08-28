@@ -1,0 +1,124 @@
+.v-btn {
+  -webkit-tap-highlight-color: transparent;
+  @apply flex transition border font-medium border-transparent hover:bg-opacity-80 active:bg-opacity-100 select-none;
+  
+  &.v-btn--icon-only {
+    @apply rounded-full;
+    > .v-btn--inner {
+      @apply w-8 h-8 min-w-8 p-0 font-normal;
+    }
+  }
+
+  &.v-btn--size-sm {
+    &.v-btn--icon-only {
+      @apply rounded-full;
+      > .v-btn--inner {
+        @apply w-6 h-6 min-w-6 p-0 gap-0;
+      }
+    }
+
+    >.v-btn--inner { 
+      @apply h-6 min-w-18 text-xs;
+    }
+  }
+
+  &.v-btn--size-lg {
+    &.v-btn--icon-only {
+      @apply rounded-full;
+      > .v-btn--inner {
+        @apply w-10 h-10 min-w-10 p-0 gap-0;
+      }
+    }
+
+    >.v-btn--inner { 
+      @apply h-10 min-w-23 text-lg;
+    }
+  }
+
+  >.v-btn--inner {
+    @apply flex flex-1 items-center justify-center gap-1 h-8 px-2 min-w-20 text-sm;
+
+    >.v-btn--prepend, >.v-btn--append {
+      @apply w-5 flex items-center justify-center;
+    }
+    
+
+    >.v-btn--icon {
+      @apply flex flex-1 items-center justify-center;
+    }
+
+  }
+
+  &.v-btn--default {
+    @apply bg-gray-100 text-gray-900;
+    &.v-btn--outlined {
+      @apply bg-transparent text-gray-900 border-gray-400 hover:bg-gray-100 active:bg-transparent;
+    }
+    &.v-btn--tonal {
+      @apply bg-gray-50 text-gray-900 border-transparent hover:bg-gray-100 active:bg-gray-50;
+    }
+    &.v-btn--ghost {
+      @apply bg-transparent text-gray-900 border-transparent hover:bg-gray-100 active:bg-transparent;
+    }
+  }
+  &.v-btn--primary {
+    @apply duration-200 bg-primary text-white;
+    &.v-btn--outlined {
+      @apply bg-transparent text-primary border-primary hover:bg-primary/10 active:bg-transparent;
+    }
+    &.v-btn--tonal {
+      @apply bg-primary/10 text-primary border-transparent hover:bg-primary/20 active:bg-primary/10;
+    }
+    &.v-btn--ghost {
+      @apply bg-transparent text-primary border-transparent hover:bg-primary/10 active:bg-transparent;
+    }
+  }
+  &.v-btn--success {
+    @apply bg-success text-white;
+    &.v-btn--outlined {
+      @apply bg-transparent text-success border-success hover:bg-success/10 active:bg-transparent;
+    }
+    &.v-btn--tonal {
+      @apply bg-success/10 text-success border-transparent hover:bg-success/20 active:bg-success/10;
+    }
+    &.v-btn--ghost {
+      @apply bg-transparent text-success border-transparent hover:bg-success/10 active:bg-transparent;
+    }
+  }
+  &.v-btn--warning {
+    @apply bg-warning text-white;
+    &.v-btn--outlined {
+      @apply bg-transparent text-warning border-warning hover:bg-warning/10 active:bg-transparent;
+    }
+    &.v-btn--tonal {
+      @apply bg-warning/10 text-warning border-transparent hover:bg-warning/20 active:bg-warning/10;
+    }
+    &.v-btn--ghost {
+      @apply bg-transparent text-warning border-transparent hover:bg-warning/10 active:bg-transparent;
+    }
+  }
+  &.v-btn--danger {
+    @apply bg-danger text-white;
+    &.v-btn--outlined {
+      @apply bg-transparent text-danger border-danger hover:bg-danger/10 active:bg-transparent;
+    }
+    &.v-btn--tonal {
+      @apply bg-danger/10  text-danger border-transparent hover:bg-danger/20 active:bg-danger/10;
+    }
+    &.v-btn--ghost {
+      @apply bg-transparent  text-danger border-transparent hover:bg-danger/10 active:bg-transparent;
+    }
+  }
+  &.v-btn--info {
+    @apply bg-info text-white;
+    &.v-btn--outlined {
+      @apply bg-transparent text-info border-info hover:bg-info/10 active:bg-transparent;
+    }
+    &.v-btn--tonal {
+      @apply bg-info/10 text-info border-transparent hover:bg-info/20 active:bg-info/10;
+    }
+    &.v-btn--ghost {
+      @apply bg-transparent text-info border-transparent hover:bg-info/10 active:bg-transparent;
+    }
+  }
+}

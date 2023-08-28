@@ -1,0 +1,6 @@
+html { @apply overflow-y-scroll; }
+
+
+input, select {
+  @apply focus:(outline-none border-primary shadow);
+}

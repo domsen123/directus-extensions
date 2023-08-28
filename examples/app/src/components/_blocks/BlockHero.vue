@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useAuth } from '~/services/useAuth'
 
 const currentAction = ref<string | null>(null)
 
@@ -8,44 +7,15 @@ const isSignUpLoading = ref(false)
 const isSignInLoading = ref(false)
 
 const payload = reactive({
-  first_name: 'Dominic',
-  last_name: 'Marx',
-  email: 'dmarx@marxulm.de',
-  password: 'lala4712',
+  first_name: '',
+  last_name: '',
+  email: '',
+  password: '',
 })
-const authStore = useAuth()
 const onSignUp = async () => {
-  try {
-    isSignUpLoading.value = true
-    await authStore.signUp(
-      payload.first_name,
-      payload.last_name,
-      payload.email,
-      payload.password,
-    )
-  }
-  catch (error: any) {
-    console.error(error)
-  }
-  finally {
-    isSignUpLoading.value = false
-  }
+
 }
 const onSignIn = async () => {
-  console.log('onSignIn')
-  try {
-    isSignInLoading.value = true
-    await authStore.signIn(
-      payload.email,
-      payload.password,
-    )
-  }
-  catch (error: any) {
-    console.error(error)
-  }
-  finally {
-    isSignInLoading.value = false
-  }
 }
 </script>
 
@@ -67,7 +37,7 @@ const onSignIn = async () => {
           </div>
         </v-col>
         <v-col cols="12" lg="5">
-          <v-card v-if="!authStore.currentUser" rounded="0" theme="light">
+          <v-card rounded="0" theme="light">
             <v-tabs v-model="currentAction">
               <v-tab value="sign-up">
                 Sign Up

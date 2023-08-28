@@ -1,17 +1,11 @@
 import { createPinia } from 'pinia'
+import { directusSSRPlugin } from 'directus-extension-ssr/utils'
 import { type UserModule } from '~/types'
 
-export const install: UserModule = ({ isClient, initialState, directus, app }) => {
+export const install: UserModule = (ctx) => {
   const pinia = createPinia()
 
-  pinia.use(({ store }) => {
-    store.directus = directus
-  })
+  pinia.use(p => directusSSRPlugin(p, ctx))
 
-  app.use(pinia)
-
-  if (isClient)
-    pinia.state.value = (initialState.pinia) || {}
-
-  else initialState.pinia = pinia.state.value
+  ctx.app.use(pinia)
 }

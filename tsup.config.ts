@@ -13,7 +13,7 @@ export default defineConfig(() => {
     'vite',
     'vue',
     'vue-router',
-    'unplugin-vue-router',
+    'pinia',
   ]
 
   return [
@@ -64,6 +64,18 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['cjs', 'esm'],
+      minify: true,
+      dts: true,
+      external,
+    },
+    {
+      entry: {
+        index: './src/utils/index.ts',
+      },
+      outDir: 'dist/utils',
+      clean: false,
+      target: 'esnext',
+      format: ['esm'],
       minify: true,
       dts: true,
       external,

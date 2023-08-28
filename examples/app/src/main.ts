@@ -1,5 +1,5 @@
 import { handler } from 'directus-extension-ssr'
-import { readMe } from '@directus/sdk'
+import { useAuthStore } from 'directus-extension-ssr/utils'
 import { setupLayouts } from 'virtual:generated-layouts'
 import App from './App.vue'
 import type { UserModule } from './types'
@@ -21,21 +21,24 @@ export default handler(App,
     Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
       .forEach(i => i.install?.(ctx))
 
-    ctx.router.beforeEach(async (to) => {
-      if (to.meta.auth) {
-        try {
-          await ctx.directus.request(readMe({ fields: ['id'] }))
-        }
-        catch (e: any) {
-          if (e.errors.some((err: any) => err.extensions.code === 'INVALID_CREDENTIALS')) {
-            // TODO Utility function?
-            if (ctx.isClient)
-              window.location.href = '/admin/login'
-            else
-              return '/admin/login'
-          }
-        }
-      }
-    })
+    const authStore = useAuthStore()
+    await authStore.setCurrentUser()
+
+    // ctx.router.beforeEach(async (to) => {
+    //   if (to.meta.auth) {
+    //     try {
+    //       await ctx.directus.request(readMe({ fields: ['id'] }))
+    //     }
+    //     catch (e: any) {
+    //       if (e.errors.some((err: any) => err.extensions.code === 'INVALID_CREDENTIALS')) {
+    //         // TODO Utility function?
+    //         if (ctx.isClient)
+    //           window.location.href = '/admin/login'
+    //         else
+    //           return '/admin/login'
+    //       }
+    //     }
+    //   }
+    // })
   },
 )

@@ -21,6 +21,9 @@ importers:
       '@antfu/eslint-config':
         specifier: ^0.41.0
         version: 0.41.0(eslint@8.47.0)(typescript@5.2.2)
+      '@directus/errors':
+        specifier: ^0.0.2
+        version: 0.0.2
       '@directus/sdk':
         specifier: ^11.0.2
         version: 11.0.2
@@ -45,6 +48,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      pinia:
+        specifier: ^2.1.6
+        version: 2.1.6(typescript@5.2.2)(vue@3.3.4)
       tsup:
         specifier: ^7.2.0
         version: 7.2.0(postcss@8.4.28)(typescript@5.2.2)
@@ -1814,7 +1820,6 @@ packages:
 
   /@directus/errors@0.0.2:
     resolution: {integrity: sha512-f3F37jQjTdf3QfPOuRibTjV/M2rYjJEWPDIU6dsLdl1iF3p5WRhTaWYuSoJlD4IpQf9YtV8quGwVQcYBGcw/vw==}
-    dev: false
 
   /@directus/extensions-sdk@10.1.8(@types/node@20.5.6)(mysql@2.18.1)(pg@8.11.0)(sass@1.66.1)(sqlite3@5.1.6)(tedious@16.1.0):
     resolution: {integrity: sha512-qV8QDCZU4HSVKmU0QfOKt9TZWtyIo7IE6ZLyeuhqJHveVIjnl99MCE4xMPPnY0bOy+x7ShG/5gbgNhYdCCnE3Q==}
@@ -8677,7 +8682,6 @@ packages:
       typescript: 5.2.2
       vue: 3.3.4
       vue-demi: 0.14.5(vue@3.3.4)
-    dev: false
 
   /pino-abstract-transport@0.4.0:
     resolution: {integrity: sha512-Znl3f1ntZnDG+NpCyJyJDS+lkrlRSbgQBkV3eqNAvet/QHql6rhKLc4DuYRlwfc3fvV611O9NXPm5pbT9AJ50g==}

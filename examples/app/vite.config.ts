@@ -10,11 +10,13 @@ import WebfontDownload from 'vite-plugin-webfont-dl'
 import Layouts from 'vite-plugin-vue-layouts'
 import generateSitemap from 'vite-plugin-pages-sitemap'
 import Vuetify from 'vite-plugin-vuetify'
+import SvgLoader from 'vite-svg-loader'
 
 export default defineConfig({
   server: {
     watch: {
-      // usePolling: true,
+      usePolling: true,
+      interval: 100,
     },
   },
   resolve: {
@@ -55,6 +57,7 @@ export default defineConfig({
       dts: 'src/components.d.ts',
     }),
     Vuetify({ styles: { configFile: 'src/assets/scss/settings.scss' } }),
+    SvgLoader(),
   ],
   ssr: {
     noExternal: [/vuetify/],

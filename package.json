@@ -1,7 +1,7 @@
 {
   "name": "directus-extension-ssr",
   "type": "module",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "author": "Dominic Marx",
   "license": "ISC",
   "homepage": "https://github.com/domsen123/directus-extension-ssr",
@@ -86,7 +86,7 @@
     }
   },
   "dependencies": {
-    "@directus/extensions-sdk": "^10.1.8",
+    "@directus/extensions-sdk": "^10.1.9",
     "@nuxt/devalue": "^2.0.2",
     "ms": "^2.1.3"
   },

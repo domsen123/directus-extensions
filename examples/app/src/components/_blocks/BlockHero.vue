@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useAuthStore } from 'directus-extension-ssr/utils'
 
+const authStore = useAuthStore()
 const currentAction = ref<string | null>(null)
-
-const isSignUpLoading = ref(false)
-const isSignInLoading = ref(false)
 
 const payload = reactive({
   first_name: '',
@@ -13,9 +12,25 @@ const payload = reactive({
   password: '',
 })
 const onSignUp = async () => {
-
+  try {
+    await authStore.register(
+      payload.first_name,
+      payload.last_name,
+      payload.email,
+      payload.password,
+    )
+  }
+  catch (error: any) {
+    console.error(error)
+  }
 }
 const onSignIn = async () => {
+  try {
+    await authStore.login(payload.email, payload.password)
+  }
+  catch (error: any) {
+    console.error(error)
+  }
 }
 </script>
 
@@ -37,7 +52,7 @@ const onSignIn = async () => {
           </div>
         </v-col>
         <v-col cols="12" lg="5">
-          <v-card rounded="0" theme="light">
+          <v-card v-if="!authStore.isAuthenticated" rounded="0" theme="light">
             <v-tabs v-model="currentAction">
               <v-tab value="sign-up">
                 Sign Up
@@ -49,23 +64,23 @@ const onSignIn = async () => {
             <v-card-text>
               <v-window v-model="currentAction" class="py-2">
                 <v-window-item value="sign-up">
-                  <v-form @submit.prevent="onSignUp">
+                  <v-form :disabled="authStore.isSigningUp" @submit.prevent="onSignUp">
                     <div class="flex gap-2">
                       <v-text-field v-model="payload.first_name" class="flex-1 flex-shrink-0" label="Firstname" variant="outlined" density="comfortable" required />
                       <v-text-field v-model="payload.last_name" class="flex-1 flex-shrink-0" label="Lastname" variant="outlined" density="comfortable" required />
                     </div>
                     <v-text-field v-model="payload.email" label="Email" variant="outlined" density="comfortable" required />
                     <mrx-password-field v-model="payload.password" label="Password" variant="outlined" density="comfortable" required />
-                    <v-btn type="submit" color="primary" size="large" variant="flat" block :loading="isSignUpLoading">
+                    <v-btn type="submit" color="primary" size="large" variant="flat" block :loading="authStore.isSigningUp">
                       Sign Up
                     </v-btn>
                   </v-form>
                 </v-window-item>
                 <v-window-item value="sign-in">
-                  <v-form @submit.prevent="onSignIn">
+                  <v-form :disabled="authStore.isSigningIn" @submit.prevent="onSignIn">
                     <v-text-field v-model="payload.email" label="Email" variant="outlined" density="comfortable" />
                     <mrx-password-field v-model="payload.password" label="Password" variant="outlined" density="comfortable" />
-                    <v-btn type="submit" color="primary" size="large" variant="flat" block :loading="isSignInLoading">
+                    <v-btn type="submit" color="primary" size="large" variant="flat" block :loading="authStore.isSigningIn">
                       Sign In
                     </v-btn>
                   </v-form>

@@ -23,22 +23,5 @@ export default handler(App,
 
     const authStore = useAuthStore()
     await authStore.setCurrentUser()
-
-    // ctx.router.beforeEach(async (to) => {
-    //   if (to.meta.auth) {
-    //     try {
-    //       await ctx.directus.request(readMe({ fields: ['id'] }))
-    //     }
-    //     catch (e: any) {
-    //       if (e.errors.some((err: any) => err.extensions.code === 'INVALID_CREDENTIALS')) {
-    //         // TODO Utility function?
-    //         if (ctx.isClient)
-    //           window.location.href = '/admin/login'
-    //         else
-    //           return '/admin/login'
-    //       }
-    //     }
-    //   }
-    // })
   },
 )

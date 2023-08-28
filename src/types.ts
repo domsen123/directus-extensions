@@ -98,3 +98,21 @@ export interface AppContext {
 }
 
 export const InjectDirectus: InjectionKey<DirectusClient<DirectusSchema>> = Symbol('Directus')
+
+export interface DirectusAssetTransformations {
+  fit?: 'cover' | 'contain' | 'inside' | 'outside'
+  width?: number
+  height?: number
+  quality?: number
+  withoutEnlargement?: boolean
+  format?: 'auto' | 'jpg' | 'png' | 'webp' | 'tiff' | 'avif'
+  transforms?: any[][]
+}
+
+export interface CurrentUser {
+  id: string
+  first_name: string
+  last_name: string
+  email: string
+  avatar: string
+}

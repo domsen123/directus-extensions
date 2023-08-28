@@ -25,11 +25,11 @@ importers:
         specifier: ^0.0.2
         version: 0.0.2
       '@directus/sdk':
-        specifier: ^11.0.3
-        version: 11.0.3
+        specifier: ^11.0.2
+        version: 11.0.2
       '@directus/types':
-        specifier: ^10.1.5
-        version: 10.1.5(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+        specifier: ^10.1.4
+        version: 10.1.4
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -1819,10 +1819,17 @@ packages:
       - debug
     dev: false
 
+  /@directus/constants@10.2.2:
+    resolution: {integrity: sha512-s3JbofEpyqUHpCCsEeSXIOa0scjlswVcesMlHkwvJFu59C1S+yXEw0DKd0Iz/rJgWzO1kiEjOoaHszPNbDfzFg==}
+    dependencies:
+      zod: 3.21.4
+    dev: true
+
   /@directus/constants@10.2.3:
     resolution: {integrity: sha512-ygXWi0ptRjQ7qqUvRDXjFQ6ITXz1gOmjT/aQw06OmgaJPscbuHoc5BFzWn4l4nhapk0hkWYhq0xskfVeA5MMtQ==}
     dependencies:
       zod: 3.21.4
+    dev: false
 
   /@directus/errors@0.0.2:
     resolution: {integrity: sha512-f3F37jQjTdf3QfPOuRibTjV/M2rYjJEWPDIU6dsLdl1iF3p5WRhTaWYuSoJlD4IpQf9YtV8quGwVQcYBGcw/vw==}
@@ -1898,8 +1905,8 @@ packages:
       - supports-color
       - tedious
 
-  /@directus/sdk@11.0.3:
-    resolution: {integrity: sha512-fHvHFcDhl8AY5quRP4cgLMHTU6F4c4ynmMpXRsi8dnSd38mIvciFyYmOVOh34Wp2N+a1YNYpXPU+NsHkfIheHw==}
+  /@directus/sdk@11.0.2:
+    resolution: {integrity: sha512-mZ+gTwEAjt9CJv5rbtx1ub2KchMcL7gzZ7cbTB1Rd+o0s71ipgBcvBKcApBdnhySTruWHHqIbNm+VnwebugaaQ==}
     engines: {node: '>=18.0.0'}
     dev: true
 
@@ -1975,6 +1982,31 @@ packages:
     resolution: {integrity: sha512-Q2QTLES809ZbAqqWuQiMmFfEhlhecj3kqyRucD0f2psfjsr5gE6VaNBG9XWPldOh2VXw9eZTgmaACEY4Ne2F+w==}
     dev: false
 
+  /@directus/types@10.1.4:
+    resolution: {integrity: sha512-PT4blzkBl+yKiV0ez/PGFyHnPXyEfW5GCjZETxOLANpv41TlRa5Pp/qF1DJfljIW3g7crAIOuDsaAdUvbuy8hw==}
+    dependencies:
+      '@directus/constants': 10.2.2
+      '@directus/schema': 10.0.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      '@types/express': 4.17.17
+      '@types/geojson': 7946.0.10
+      express: 4.18.2
+      geojson: 0.5.0
+      knex: 2.4.2(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0)
+      pino: 8.14.1
+      vue: 3.3.4
+      vue-router: 4.2.0(vue@3.3.4)
+      zod: 3.21.4
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    dev: true
+
   /@directus/types@10.1.5(mysql@2.18.1)(pg@8.11.0)(sqlite3@5.1.6)(tedious@16.1.0):
     resolution: {integrity: sha512-Y7HeStRYKGIdoG6k2ooAQr7KKNv8wOjavrBZr8RKolvr5l/3RfjU/SzyghYSFXphFEOWpKuQYlREykKQI4tThw==}
     dependencies:
@@ -1998,6 +2030,7 @@ packages:
       - sqlite3
       - supports-color
       - tedious
+    dev: false
 
   /@directus/update-check@11.0.2:
     resolution: {integrity: sha512-z5gAQ3A5ZVwS47A4s7pR0/zWfSBYLcw1CmxwvETXImNb70K8m2BijoWtqaLaZkaxGNIHJiJ2enkSdoh0jhGNRQ==}

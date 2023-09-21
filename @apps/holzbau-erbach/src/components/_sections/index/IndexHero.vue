@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import HeroBackground from '~/assets/images/bg_square.png'
 import DotsLightBackground from '~/assets/images/bg_dots_light.png'
 import { SERVICES } from '~/constants'
 
@@ -19,10 +18,10 @@ const company = store.getItemByCollection('info_company')
             Unser Service im Überblick
           </h2>
           <div class="mb-8 flex flex-col gap-2">
-            <div v-for="{ text } in SERVICES" :key="text" class="ml-4 flex items-center gap-2 xl:text-xl">
+            <router-link v-for="{ text } in SERVICES" :key="text" :to="`/#${text}`" class="ml-4 flex items-center gap-2 xl:text-xl">
               <div class="h-4 w-1 bg-accent -skew-x-8" />
               <div v-text="text" />
-            </div>
+            </router-link>
           </div>
           <div class="flex flex-col gap-4 md:flex-row">
             <app-button class="text-center text-black" link :href="`tel:${company?.phone}`">

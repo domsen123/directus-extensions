@@ -13,6 +13,15 @@ export default handler(App,
   {
     routerOptions: {
       routes: setupLayouts(routes),
+      scrollBehavior(to, _, savedPosition) {
+        if (to.hash) {
+          return {
+            el: to.hash,
+            behavior: 'smooth',
+          }
+        }
+        return savedPosition || { top: 0 }
+      },
     },
   },
   async (ctx) => {

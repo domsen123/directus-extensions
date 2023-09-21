@@ -3,6 +3,11 @@ import { NAVIGATION_ITEMS } from '~/constants'
 
 const store = useMainStore()
 const company = store.getItemByCollection('info_company')
+
+const scrollToTop = () => {
+  console.log('drin')
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 </script>
 
 <template>
@@ -11,7 +16,7 @@ const company = store.getItemByCollection('info_company')
     <main>
       <router-view />
     </main>
-    <footer class="border-t-10 border-zinc-800 bg-white py-15 md:pt-15">
+    <footer class="bg-white py-15 md:pt-15">
       <div class="container">
         <div class="grid grid-cols-1 gap-12 text-zinc-900 lg:grid-cols-4 md:grid-cols-2">
           <div>
@@ -85,5 +90,6 @@ const company = store.getItemByCollection('info_company')
         </div>
       </div>
     </footer>
+    <v-btn class="fixed bottom-10 right-10 shadow-xl" color="primary" size="lg" icon="i-solar:alt-arrow-up-line-duotone" icon-only @click="scrollToTop" />
   </div>
 </template>

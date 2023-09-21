@@ -44,7 +44,28 @@ onUnmounted(() => {
         />
       </router-link>
       <div class="z-2 ml-auto">
-        <v-btn class="inline-flex md:hidden" icon="i-solar:hamburger-menu-line-duotone" icon-only />
+        <v-menu>
+          <template #activator="{ args }">
+            <v-btn class="inline-flex md:hidden" icon="i-solar:hamburger-menu-line-duotone" icon-only v-bind="args" />
+          </template>
+          <template #default="{ closeMenu }">
+            <div class="flex flex-col px-2">
+              <div class="flex justify-end">
+                <v-btn class="inline-flex md:hidden" icon="i-solar:close-circle-line-duotone" icon-only @click="closeMenu" />
+              </div>
+              <router-link
+                v-for="item in NAVIGATION_ITEMS"
+                :key="item.to"
+                class="transition duration-200"
+                :to="item.to"
+                :class="{ '!text-primary': $route.path === '/' && $route.hash === item.to.slice(1) }"
+                @click="closeMenu"
+              >
+                {{ item.text }}
+              </router-link>
+            </div>
+          </template>
+        </v-menu>
         <div class="hidden items-center gap-2 md:flex">
           <div class="i-solar:phone-linear mt-1" />
           <a href="tel:+4973059277100" class="text-sm leading-none">

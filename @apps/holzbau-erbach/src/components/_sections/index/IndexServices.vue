@@ -15,7 +15,7 @@ import { SERVICES } from '~/constants'
           Unsere <span class="font-bold">Leistungen</span>
         </h2>
         <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-          <div v-for="{ text, svg, lines } in SERVICES" :key="text" class="flex flex-col">
+          <div v-for="{ text, svg, lines } in SERVICES" :id="text" :key="text" class="flex flex-col">
             <div class="mb-2 text-primary" v-html="svg" />
             <h2 class="mb-4 text-2xl font-semibold" v-text="text" />
             <p v-for="line in lines" :key="line" class="mb-2 leading-relaxed text-blue-gray-600" v-text="line" />

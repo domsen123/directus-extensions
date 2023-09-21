@@ -10,6 +10,7 @@ const success = ref(false)
 
 const payload = reactive({
   name: '',
+  email: '',
   phone: '',
   topic: 'Dachdeckung',
   postcode: '',
@@ -21,6 +22,7 @@ const onSubmit = async (e: Event) => {
     loading.value = true
     await directus.request(createItem('inquiries', {
       name: payload.name,
+      email: payload.email,
       phone: payload.phone,
       topic: payload.topic,
       postcode: payload.postcode,
@@ -34,6 +36,7 @@ const onSubmit = async (e: Event) => {
     loading.value = false
     success.value = true
     payload.name = ''
+    payload.email = ''
     payload.phone = ''
     payload.topic = 'Dachdeckung'
     payload.postcode = ''
@@ -60,9 +63,14 @@ const onSubmit = async (e: Event) => {
     </template>
 
     <template v-else>
-      <div class="flex flex-col gap-3 md:flex-row">
-        <app-form-group label="Name" class="flex-1">
+      <div>
+        <app-form-group label="Name">
           <input v-model="payload.name" type="text" class="w-full border bg-zinc-50 px-3 py-2 text-sm" />
+        </app-form-group>
+      </div>
+      <div class="flex flex-col gap-3 md:flex-row">
+        <app-form-group label="E-Mail" class="flex-1">
+          <input v-model="payload.email" type="text" class="w-full border bg-zinc-50 px-3 py-2 text-sm" />
         </app-form-group>
         <app-form-group label="Telefon" class="flex-1">
           <input v-model="payload.phone" type="phone" class="w-full border bg-zinc-50 px-3 py-2 text-sm" />
@@ -71,7 +79,7 @@ const onSubmit = async (e: Event) => {
       <div class="flex flex-col gap-3 md:flex-row">
         <app-form-group label="Interesse am Thema" class="flex-1">
           <select v-model="payload.topic" class="w-full border bg-zinc-50 px-3 py-2 text-sm">
-            <option v-for="{ text } in SERVICES" :key="text" v-text="text" />
+            <option v-for="{ text } in [...SERVICES, { text: 'Sonstiges' }]" :key="text" v-text="text" />
           </select>
         </app-form-group>
         <app-form-group label="Im Einsatzgebiet" class="flex-1">

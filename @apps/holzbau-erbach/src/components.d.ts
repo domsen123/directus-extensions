@@ -24,6 +24,7 @@ declare module 'vue' {
     SimplePage: typeof import('./components/SimplePage.vue')['default']
     TitlePage: typeof import('./components/TitlePage.vue')['default']
     VBtn: typeof import('./components/_ui/VBtn/VBtn.vue')['default']
+    VMenu: typeof import('./components/_ui/VMenu/VMenu.vue')['default']
     VSpinner: typeof import('./components/_ui/VSpinner/VSpinner.vue')['default']
   }
 }

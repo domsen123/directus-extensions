@@ -18,7 +18,7 @@
     "@vueuse/core": "^10.4.0",
     "@vueuse/router": "^10.4.0",
     "dayjs": "^1.11.9",
-    "directus": "^10.6.1",
+    "directus": "^10.6.2",
     "directus-extension-ssr": "workspace:^",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.6",

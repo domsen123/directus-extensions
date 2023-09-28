@@ -1,7 +1,7 @@
 import process from 'node:process'
 import { createSSRApp } from 'vue'
 import { type Router, createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
-import { createHead } from '@vueuse/head'
+import { createHead } from '@unhead/vue'
 import { createDirectus, graphql, realtime, rest } from '@directus/sdk'
 import type { Request } from 'express'
 import type { AppDirectusClient, DirectusSchema, SharedHandler } from '../types'

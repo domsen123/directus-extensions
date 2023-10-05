@@ -1,5 +1,7 @@
 import { defineConfig } from 'tsup'
 
+const minify = false
+
 // @ts-expect-error stfu!
 export default defineConfig(() => {
   const external = [
@@ -37,7 +39,7 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['cjs'],
-      minify: true,
+      minify,
       dts: true,
       noExternal: ['@nuxt/devalue', '@directus/extensions-sdk'],
       external,
@@ -51,7 +53,7 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['esm'],
-      minify: true,
+      minify,
       dts: true,
       noExternal: ['directus-extension-ssr/types'],
       external,
@@ -64,7 +66,7 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['cjs', 'esm'],
-      minify: true,
+      minify,
       dts: true,
       external,
     },
@@ -76,7 +78,7 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['esm'],
-      minify: true,
+      minify,
       dts: true,
       external,
     },

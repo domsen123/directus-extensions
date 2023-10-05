@@ -60,7 +60,8 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
     ...options,
     ...renderOptions,
   }
-  if (skipRender) return sharedServerOptions
+  if (skipRender)
+    return sharedServerOptions
 
   const {
     app,

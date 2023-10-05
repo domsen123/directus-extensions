@@ -7,7 +7,7 @@
   "license": "ISC",
   "keywords": [],
   "scripts": {
-    "dev": "vite dev --port 5174 --host",
+    "dev": "NODE_OPTIONS=--inspect vite dev --port 5174 --host",
     "start": "npx directus start",
     "build": "pnpm run build:client && pnpm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",

@@ -7,7 +7,8 @@ export const useUser = defineStore('user', {
   }) as { currentUser: any },
   actions: {
     async fetchCurrentUser() {
-      if (this.$state.currentUser) return
+      if (this.$state.currentUser)
+        return
       try {
         const currentUser = await this.directus.request(readMe({ fields: ['first_name'] }))
         this.$state.currentUser = currentUser

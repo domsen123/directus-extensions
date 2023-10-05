@@ -11,10 +11,8 @@
     },
     "resolveJsonModule": true,
     "types": [
-      "@directus/types",
-      "vite-plugin-vue-layouts/client",
-      "vite-plugin-pages/client",
-      "vite/client"
+      "vite/client",
+      "@directus/types"
     ],
     "allowJs": true,
     "strict": true,
@@ -25,5 +23,5 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "exclude": ["dist", "node_modules", "cypress"]
+  "exclude": ["dist", "**/dist", "node_modules", "**/node_modules", "packages", "examples"]
 }

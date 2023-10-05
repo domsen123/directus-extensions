@@ -8,7 +8,8 @@ export const useBlog = defineStore('blog', {
   }) as { blogList: DirectusSchema['posts'] },
   actions: {
     async fetchBlogs() {
-      if (this.$state.blogList.length > 0) return
+      if (this.$state.blogList.length > 0)
+        return
       try {
         const result = await this.directus.request(readItems('posts'))
         this.$state.blogList = result

@@ -3,8 +3,10 @@ import { queryToParams } from '@directus/sdk'
 const SEPARATOR = '/'
 
 const mergePaths = (a: string, b: string) => {
-  if (a.endsWith(SEPARATOR)) a = a.slice(0, -1)
-  if (!b.startsWith(SEPARATOR)) b = SEPARATOR + b
+  if (a.endsWith(SEPARATOR))
+    a = a.slice(0, -1)
+  if (!b.startsWith(SEPARATOR))
+    b = SEPARATOR + b
   return a + b
 }
 

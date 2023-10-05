@@ -19,6 +19,7 @@ export const useErrorStore = defineStore('error', {
   }),
   actions: {
     addError(error: Error) {
+      console.log(error)
       if (isDirectusError(error))
         console.log('directus_error', error)
       else
@@ -78,6 +79,7 @@ export const useAuthStore = defineStore('auth', {
         await this.setCurrentUser()
       }
       catch (error: any) {
+        console.log(error)
         useErrorStore().addError(error)
         throw error
       }
@@ -89,7 +91,10 @@ export const useAuthStore = defineStore('auth', {
       try {
         this.isSigningUp = true
         await this.$directus.request(createUser({
-          first_name, last_name, email, password,
+          first_name,
+          last_name,
+          email,
+          password,
         }))
         this.$state.authData = await this.$directus.login(email, password, { mode: 'cookie' })
         await this.setCurrentUser()

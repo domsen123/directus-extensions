@@ -24,8 +24,6 @@ export const handler: ClientHandler = async (App, options, hook) => {
   })
 
   app.use(router)
-
-  router.isReady().then(() => {
-    app.mount('#app')
-  })
+  await router.isReady()
+  app.mount('#app')
 }

@@ -10,7 +10,7 @@ type AnyItem = Record<string, any>
 
 export interface InitialState extends AnyItem {
   access_token: string | null
-  directusCredentials: AuthenticationData | null
+  refresh_token: string | null
 }
 export interface SharedResult {
   app: App
@@ -55,7 +55,7 @@ export interface ExtendedAuthenticationClient extends AuthenticationClient<Direc
 }
 
 export type AppDirectusClient = DirectusClient<DirectusSchema>
-& ExtendedAuthenticationClient
+& AuthenticationClient<DirectusSchema>
 & RestClient<DirectusSchema>
 & GraphqlClient<DirectusSchema>
 & WebSocketClient<DirectusSchema>

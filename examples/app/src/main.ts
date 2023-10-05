@@ -5,12 +5,10 @@ import App from './App.vue'
 import type { UserModule } from './types'
 import routes from '~pages'
 
-// import '@unocss/reset/tailwind-compat.css'
 import '~/assets/styles/main.css'
 import 'uno.css'
 
 export default handler(App, {
-  routerType: 'unplugin-vue-router',
   routerOptions: {
     routes: setupLayouts(routes),
   },

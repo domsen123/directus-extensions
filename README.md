@@ -93,19 +93,14 @@ If you want to use Pinia, do something like that:
 
 ```js
 // src/modules/pinia.ts
-export const install: UserModule = ({ isClient, initialState, directus, app }) => {
+import { directusSSRPlugin } from 'directus-extension-ssr/utils'
+
+export const install: UserModule = (ctx) => {
   const pinia = createPinia()
 
-  pinia.use(({ store }) => {
-    store.directus = directus
-  })
+  pinia.use(p => directusSSRPlugin(p, ctx))
 
-  app.use(pinia)
-
-  if (isClient)
-    pinia.state.value = (initialState.pinia) || {}
-
-  else initialState.pinia = pinia.state.value
+  ctx.app.use(pinia)
 }
 
 // src/pinia.d.ts
@@ -117,36 +112,17 @@ declare module 'pinia' {
 
 // src/main.ts
 export default handler(App, {
-  routerType: 'vue-router',
   routerOptions: {
     routes: [
       { path: '/', component: () => import('./pages/Home.vue') }
     ],
+    // or
+    // routes: setupLayouts(routes)
   }
 }, async (ctx) => {
   // install all modules under `modules/`
   Object.values(import.meta.glob < { install: UserModule } > ('./modules/*.ts', { eager: true }))
     .forEach(i => i.install?.(ctx))
-},)
-
-// stores/user.ts
-export const useUser = defineStore('user', {
-  state: () => ({
-    currentUser: null,
-  }) as { currentUser: any },
-  actions: {
-    async fetchCurrentUser() {
-      if (this.$state.currentUser)
-        return
-      try {
-        const currentUser = await this.directus.request(readMe({ fields: ['first_name'] }))
-        this.$state.currentUser = currentUser
-      }
-      catch (e: any) {
-        console.error(e.message)
-      }
-    },
-  },
 })
 ```
 

@@ -55,11 +55,12 @@ export const createApp: SharedHandler = async (App, options, hook) => {
 
   const storage = memoryStorage()
 
-  let directus: AppDirectusClient
+  const publicUrl: string = 'env' in options ? options.env.PUBLIC_URL : `${new URL(window.location.href).origin}/`
+
+  const directus = getDirectus(isClient, storage, publicUrl)
   try {
     if (!isClient) {
       const { req, env } = options
-      directus = getDirectus(isClient, storage, env.PUBLIC_URL)
 
       const refresh_token = getCookieValue(req, env.REFRESH_TOKEN_COOKIE_NAME)
       if (refresh_token) {
@@ -72,14 +73,12 @@ export const createApp: SharedHandler = async (App, options, hook) => {
       }
     }
     else {
-      directus = getDirectus(isClient, storage, `${new URL(window.location.href).origin}/`)
       if (initialState.access_token)
         directus.setToken(initialState.access_token)
     }
   }
   catch (error: any) {
-    console.error('entry-shared', error)
-    throw error
+    // console.error('entry-shared', error)
   }
 
   const app = createSSRApp(App)

@@ -44,19 +44,21 @@ export interface UserOptions {
 }
 export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void | RenderFn>
 
-export interface ExtendedAuthenticationClient<T = DirectusSchema> extends AuthenticationClient<T> {
+export interface DirectusSchema extends Record<string | number | symbol, unknown> {
+}
+
+export interface ExtendedAuthenticationClient extends AuthenticationClient<DirectusSchema> {
   setCredentials: (data: AuthenticationData) => void
   getCredentials: () => Promise<AuthenticationData | null>
   setRefreshToken: (refresh_token: string | null) => Promise<void>
   setToken: (access_token: string | null) => Promise<void>
 }
 
-export interface DirectusSchema {}
-export type AppDirectusClient<T = DirectusSchema> = DirectusClient<T>
-& ExtendedAuthenticationClient<T>
-& RestClient<T>
-& GraphqlClient<T>
-& WebSocketClient<T>
+export type AppDirectusClient = DirectusClient<DirectusSchema>
+& ExtendedAuthenticationClient
+& RestClient<DirectusSchema>
+& GraphqlClient<DirectusSchema>
+& WebSocketClient<DirectusSchema>
 
 export type RenderFn = (options: RenderOptions) => Promise<RenderResult | SharedServerOptions>
 export interface RenderOptions {

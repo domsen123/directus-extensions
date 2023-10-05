@@ -19,7 +19,7 @@ export const handler: ClientHandler = async (App, options, hook) => {
       // The first route is rendered in the server and its state is provided globally.
       isFirstRoute = false
       entryRoutePath = to.path
-      to.meta.state = initialState
+      to.meta.state = initialState.routeState
     }
   })
 

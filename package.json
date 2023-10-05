@@ -1,7 +1,7 @@
 {
   "name": "directus-extension-ssr",
   "type": "module",
-  "version": "2.0.8",
+  "version": "2.0.14",
   "author": "Dominic Marx",
   "license": "ISC",
   "homepage": "https://github.com/domsen123/directus-extension-ssr",
@@ -50,6 +50,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "tsup",
+    "build:watch": "tsup --watch",
     "clean:build": "rm -rf dist && tsup",
     "_publish": "pnpm build && npm publish",
     "dev:designer": "pnpm -r --filter @directus-extension-ssr/designer dev",

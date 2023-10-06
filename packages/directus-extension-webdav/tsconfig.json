@@ -1,19 +1,11 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
     "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "node",
-    "paths": {
-      "~/*": ["src/*"]
-    },
     "resolveJsonModule": true,
-    "types": [
-      "vite/client",
-      "@directus/types"
-    ],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,

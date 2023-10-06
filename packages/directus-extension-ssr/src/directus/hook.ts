@@ -7,6 +7,7 @@ import ms from 'ms'
 import devalue from '@nuxt/devalue'
 import type { Application } from 'express'
 import type { ViteDevServer } from 'vite'
+import type { HookConfig } from '@directus/types'
 import type { InitialState, RenderFn, RenderResult } from '../types'
 
 const DIRECTUS_ROUTES = [
@@ -53,7 +54,7 @@ export function getMilliseconds(value: unknown, fallback = undefined): number | 
   return ms(String(value)) ?? fallback
 }
 
-export const config = defineHook(async ({ init }, { env }) => {
+export const config: HookConfig = defineHook(async ({ init }, { env }) => {
   init('routes.custom.after', async (ctx) => {
     const app: Application = ctx.app
 

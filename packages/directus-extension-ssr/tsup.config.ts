@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsup'
 
-const minify = false
+const minify = true
 
 // @ts-expect-error stfu!
 export default defineConfig(() => {

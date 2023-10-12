@@ -1,112 +1,16 @@
 {
-  "name": "directus-extension-ssr",
+  "name": "directus-extension-ssr-wrapper",
   "type": "module",
-  "version": "2.0.7",
-  "author": "Dominic Marx",
-  "license": "ISC",
-  "homepage": "https://github.com/domsen123/directus-extension-ssr",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/domsen123/directus-extension-ssr"
-  },
-  "bugs": {
-    "url": "https://github.com/domsen123/directus-extension-ssr/issues"
-  },
-  "keywords": [
-    "directus",
-    "extension",
-    "ssr",
-    "vite",
-    "vue"
-  ],
-  "exports": {
-    ".": "./dist/vue/entry-client.js",
-    "./entry-client": "./dist/vue/entry-client.js",
-    "./entry-server": "./dist/vue/entry-server.js",
-    "./types": "./dist/types/index.js",
-    "./utils": "./dist/utils/index.js",
-    "./plugin": {
-      "import": "./dist/vue/plugin.js",
-      "require": "./dist/vue/plugin.cjs"
-    },
-    "./package.json": "./package.json"
-  },
-  "main": "dist/vue/entry-client.js",
-  "types": "dist/vue/entry-client.d.ts",
-  "typesVersions": {
-    "*": {
-      "types": [
-        "dist/types/index.d.ts"
-      ],
-      "plugin": [
-        "dist/vue/plugin.d.cts"
-      ],
-      "utils": [
-        "dist/utils/index.d.ts"
-      ]
-    }
-  },
+  "version": "1.0.0",
+  "description": "A wrapper project for Directus extension SSR",
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "build": "tsup",
-    "clean:build": "rm -rf dist && tsup",
-    "_publish": "pnpm build && npm publish",
-    "app:spa": "pnpm -r --filter @example/app exec -- vite dev --port 1337",
-    "app:bootstrap": "pnpm -r --filter @example/app exec -- npx directus bootstrap",
-    "app:dev": "SSR_ENV=development pnpm -r --filter @example/app exec -- npx directus start",
-    "app:build": "pnpm -r --filter @example/app build",
-    "app:start": "pnpm -r --filter @example/app exec -- npx directus start"
-  },
-  "directus:extension": {
-    "type": "bundle",
-    "path": {
-      "api": "dist/directus/api.cjs",
-      "app": "dist/directus/app.cjs"
-    },
-    "entries": [
-      {
-        "name": "directus-extension-ssr",
-        "type": "hook",
-        "source": ""
-      }
-    ],
-    "host": "^10.4.2"
-  },
-  "peerDependencies": {
-    "@directus/sdk": "^11.0.1",
-    "express": "^4.18.2",
-    "unplugin-vue-router": "^0.6.4",
-    "vue": "^3.3.4",
-    "vue-router": "^4.2.2"
-  },
-  "peerDependenciesMeta": {
-    "unplugin-vue-router": {
-      "optional": true
-    }
-  },
-  "dependencies": {
-    "@directus/extensions-sdk": "^10.1.9",
-    "@nuxt/devalue": "^2.0.2",
-    "ms": "^2.1.3"
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.41.0",
-    "@directus/errors": "^0.0.2",
-    "@directus/sdk": "^11.0.2",
-    "@directus/types": "^10.1.4",
-    "@types/express": "^4.17.17",
-    "@types/ms": "^0.7.31",
-    "@types/node": "^20.5.6",
-    "@vueuse/head": "^1.3.1",
-    "eslint": "^8.47.0",
-    "express": "^4.18.2",
-    "pinia": "^2.1.6",
-    "tsup": "^7.2.0",
-    "typescript": "^5.2.2",
-    "unplugin-vue-router": "^0.6.4",
-    "vite": "^4.4.9",
-    "vue": "^3.3.4",
-    "vue-router": "^4.2.4"
+    "@antfu/eslint-config": "1.0.0-beta.19",
+    "@types/node": "^20.8.2",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
   }
 }

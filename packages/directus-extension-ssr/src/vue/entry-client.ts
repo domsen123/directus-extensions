@@ -19,13 +19,11 @@ export const handler: ClientHandler = async (App, options, hook) => {
       // The first route is rendered in the server and its state is provided globally.
       isFirstRoute = false
       entryRoutePath = to.path
-      to.meta.state = initialState
+      to.meta.state = initialState.routeState
     }
   })
 
   app.use(router)
-
-  router.isReady().then(() => {
-    app.mount('#app')
-  })
+  await router.isReady()
+  app.mount('#app')
 }

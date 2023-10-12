@@ -1,7 +1,6 @@
 import { type PiniaPluginContext, defineStore } from 'pinia'
 import type { AuthenticationData } from '@directus/sdk'
 import { createUser, readMe } from '@directus/sdk'
-import { isDirectusError } from '@directus/errors'
 import type { AppContext, CurrentUser } from '../types'
 
 export const directusSSRPlugin = ({ store }: PiniaPluginContext, ctx: AppContext) => {
@@ -16,13 +15,11 @@ export const directusSSRPlugin = ({ store }: PiniaPluginContext, ctx: AppContext
 export const useErrorStore = defineStore('error', {
   state: () => ({
     errors: [],
-  }),
+  }) as { errors: Error[] },
   actions: {
     addError(error: Error) {
-      if (isDirectusError(error))
-        console.log('directus_error', error)
-      else
-        console.log('unknown_error', error)
+      console.error(error)
+      this.errors.push(error)
     },
   },
 })
@@ -48,9 +45,10 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async setCurrentUser() {
       try {
-        this.currentUser = await this.$directus.request(readMe({
+        const response = await this.$directus.request(readMe({
           fields: ['id', 'first_name', 'last_name', 'email', 'avatar'],
         })) as CurrentUser
+        this.currentUser = response
       }
       catch (error: any) {
         this.authData = null
@@ -89,7 +87,10 @@ export const useAuthStore = defineStore('auth', {
       try {
         this.isSigningUp = true
         await this.$directus.request(createUser({
-          first_name, last_name, email, password,
+          first_name,
+          last_name,
+          email,
+          password,
         }))
         this.$state.authData = await this.$directus.login(email, password, { mode: 'cookie' })
         await this.setCurrentUser()

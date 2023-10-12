@@ -7,7 +7,7 @@ import ms from 'ms'
 import devalue from '@nuxt/devalue'
 import type { Application } from 'express'
 import type { ViteDevServer } from 'vite'
-import type { AuthenticationData } from '@directus/sdk'
+import type { HookConfig } from '@directus/types'
 import type { InitialState, RenderFn, RenderResult } from '../types'
 
 const DIRECTUS_ROUTES = [
@@ -54,7 +54,7 @@ export function getMilliseconds(value: unknown, fallback = undefined): number | 
   return ms(String(value)) ?? fallback
 }
 
-export const config = defineHook(async ({ init }, { env }) => {
+export const config: HookConfig = defineHook(async ({ init }, { env }) => {
   init('routes.custom.after', async (ctx) => {
     const app: Application = ctx.app
 
@@ -105,7 +105,7 @@ export const config = defineHook(async ({ init }, { env }) => {
           }
           const initialState: InitialState = {
             access_token: null,
-            directusCredentials: null,
+            refresh_token: null,
           }
 
           const {
@@ -123,12 +123,8 @@ export const config = defineHook(async ({ init }, { env }) => {
             env,
           }) as RenderResult
 
-          let directusCredentials: AuthenticationData | null = null
-
           try {
-            directusCredentials = await directus.getCredentials()
-
-            if (directus && directusCredentials?.refresh_token) {
+            if (directus && initialState.refresh_token) {
               const cookieOptions = {
                 httpOnly: true,
                 domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
@@ -136,7 +132,7 @@ export const config = defineHook(async ({ init }, { env }) => {
                 secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
                 sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
               }
-              res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, directusCredentials.refresh_token, cookieOptions)
+              res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, initialState.refresh_token, cookieOptions)
             }
             else {
               res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
@@ -146,11 +142,7 @@ export const config = defineHook(async ({ init }, { env }) => {
             res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
           }
 
-          const state = {
-            ...initialState,
-            directusCredentials,
-          }
-          const __INITIAL_STATE__ = `  <script>window.__INITIAL_STATE__ = ${devalue(state)}</script>`
+          const __INITIAL_STATE__ = `  <script>window.__INITIAL_STATE__ = ${devalue(initialState)}</script>`
 
           const html = template
             .replace('<html', `<html ${htmlAttrs}`)

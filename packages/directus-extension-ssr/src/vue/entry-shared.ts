@@ -1,18 +1,29 @@
-import process from 'node:process'
 import { createSSRApp } from 'vue'
 import { type Router, createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
-import { createHead } from '@vueuse/head'
-import { createDirectus, graphql, realtime, rest } from '@directus/sdk'
+import { createHead } from '@unhead/vue'
+import type { AuthenticationData, AuthenticationStorage } from '@directus/sdk'
+import { authentication, createDirectus, graphql, realtime, rest } from '@directus/sdk'
 import type { Request } from 'express'
 import type { AppDirectusClient, DirectusSchema, SharedHandler } from '../types'
-import { authentication } from './directus/authentication'
 
-const getDirectus = (isClient: boolean): AppDirectusClient => {
+// import { authentication } from './directus/authentication'
+
+export const memoryStorage = () => {
+  let store: AuthenticationData | null = null
+
+  return {
+    get: async () => store,
+    set: async (value: AuthenticationData | null) => {
+      store = value
+    },
+  } as AuthenticationStorage
+}
+
+const getDirectus = (isClient: boolean, storage: AuthenticationStorage, PUBLIC_URL: string): AppDirectusClient => {
   const isServer = !isClient
-  const PUBLIC_URL = isServer ? process.env.PUBLIC_URL as string : `${new URL(window.location.href).origin}/`
 
   return createDirectus<DirectusSchema>(PUBLIC_URL)
-    .with(authentication())
+    .with(authentication(isServer ? 'json' : 'cookie', { storage }))
     .with(rest())
     .with(graphql())
     .with(realtime({
@@ -42,29 +53,35 @@ export const createApp: SharedHandler = async (App, options, hook) => {
 
   routerOptions.scrollBehavior ??= scrollBehavior
 
-  const directus = getDirectus(isClient)
+  const storage = memoryStorage()
 
+  const publicUrl: string = 'env' in options ? options.env.PUBLIC_URL : `${new URL(window.location.href).origin}/`
+
+  const directus = getDirectus(isClient, storage, publicUrl)
   try {
     if (!isClient) {
       const { req, env } = options
+
       const refresh_token = getCookieValue(req, env.REFRESH_TOKEN_COOKIE_NAME)
       if (refresh_token) {
-        await directus.setRefreshToken(refresh_token)
-        await directus.refresh()
+        const data = await storage.get() as AuthenticationData
+        storage.set({ ...data, refresh_token })
+
+        const authData = await directus.refresh()
+        initialState.access_token = authData.access_token
+        initialState.refresh_token = authData.refresh_token
       }
     }
     else {
-      if (initialState.directusCredentials)
-        await directus.setCredentials(initialState.directusCredentials)
+      if (initialState.access_token)
+        directus.setToken(initialState.access_token)
     }
   }
   catch (error: any) {
-    await directus.setCredentials({ access_token: null, refresh_token: null, expires: null, expires_at: null })
-    console.error('entry-shared', error)
+    // console.error('entry-shared', error)
   }
 
   const app = createSSRApp(App)
-  // app.provide(InjectDirectus, directus)
   app.provide('directus', directus)
 
   // @ts-expect-error ...

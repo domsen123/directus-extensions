@@ -53,6 +53,7 @@ onUnmounted(() => {
               <div class="flex justify-end">
                 <v-btn class="inline-flex md:hidden" icon="i-solar:close-circle-line-duotone" icon-only @click="closeMenu" />
               </div>
+              <router-link to="/" class="transition duration-200" @click="closeMenu">Kontakt</router-link>
               <router-link
                 v-for="item in NAVIGATION_ITEMS"
                 :key="item.to"

@@ -1,21 +1,11 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
     "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "node",
-    "paths": {
-      "~/*": ["src/*"]
-    },
     "resolveJsonModule": true,
-    "types": [
-      "@directus/types",
-      "vite-plugin-vue-layouts/client",
-      "vite-plugin-pages/client",
-      "vite/client"
-    ],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
@@ -25,5 +15,5 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "exclude": ["dist", "node_modules", "cypress"]
+  "exclude": ["dist", "node_modules"]
 }

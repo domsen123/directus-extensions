@@ -25,24 +25,21 @@ But your ```src/main.ts``` file should look similar like this:
 import { handler } from 'directus-extension-ssr'
 import App from './App.vue'
 
-export default handler(App,
-  {
-    routerType: 'vue-router', // or 'unplugin-vue-router'
-    routerOptions: {
-      routes: [
-        { path: '/', component: () => import('./pages/Home.vue') },
-        { path: '/about', component: () => import('./pages/About.vue') },
-      ],
-      // extendRoutes: () => setupLayouts(routes) => if you want to use 'unplugin-vue-router' with 'vite-plugin-vue-layouts'! But don not forget pnpm i -D vite-plugin-vue-layouts
-    }
-  },
-  async (ctx) => {
-    // Add your custom logic here
-    // register pinia for example
-    // register vuetify
-    // do what ever you want
-  },
-)
+export default handler(App, {
+  routerType: 'vue-router', // or 'unplugin-vue-router'
+  routerOptions: {
+    routes: [
+      { path: '/', component: () => import('./pages/Home.vue') },
+      { path: '/about', component: () => import('./pages/About.vue') },
+    ],
+    // extendRoutes: () => setupLayouts(routes) => if you want to use 'unplugin-vue-router' with 'vite-plugin-vue-layouts'! But don not forget pnpm i -D vite-plugin-vue-layouts
+  }
+}, async (ctx) => {
+  // Add your custom logic here
+  // register pinia for example
+  // register vuetify
+  // do what ever you want
+},)
 ```
 ### SECOND STEP
 Next add DirectusSSR in vite.config.ts as a plugin.
@@ -96,19 +93,14 @@ If you want to use Pinia, do something like that:
 
 ```js
 // src/modules/pinia.ts
-export const install: UserModule = ({ isClient, initialState, directus, app }) => {
+import { directusSSRPlugin } from 'directus-extension-ssr/utils'
+
+export const install: UserModule = (ctx) => {
   const pinia = createPinia()
 
-  pinia.use(({ store }) => {
-    store.directus = directus
-  })
+  pinia.use(p => directusSSRPlugin(p, ctx))
 
-  app.use(pinia)
-
-  if (isClient)
-    pinia.state.value = (initialState.pinia) || {}
-
-  else initialState.pinia = pinia.state.value
+  ctx.app.use(pinia)
 }
 
 // src/pinia.d.ts
@@ -119,39 +111,18 @@ declare module 'pinia' {
 }
 
 // src/main.ts
-export default handler(App,
-  {
-    routerType: 'vue-router',
-    routerOptions: {
-      routes: [
-        { path: '/', component: () => import('./pages/Home.vue') }
-      ],
-    }
-  },
-  async (ctx) => {
-    // install all modules under `modules/`
-    Object.values(import.meta.glob < { install: UserModule } > ('./modules/*.ts', { eager: true }))
-      .forEach(i => i.install?.(ctx))
-  },
-)
-
-// stores/user.ts
-export const useUser = defineStore('user', {
-  state: () => ({
-    currentUser: null,
-  }) as { currentUser: any },
-  actions: {
-    async fetchCurrentUser() {
-      if (this.$state.currentUser) return
-      try {
-        const currentUser = await this.directus.request(readMe({ fields: ['first_name'] }))
-        this.$state.currentUser = currentUser
-      }
-      catch (e: any) {
-        console.error(e.message)
-      }
-    },
-  },
+export default handler(App, {
+  routerOptions: {
+    routes: [
+      { path: '/', component: () => import('./pages/Home.vue') }
+    ],
+    // or
+    // routes: setupLayouts(routes)
+  }
+}, async (ctx) => {
+  // install all modules under `modules/`
+  Object.values(import.meta.glob < { install: UserModule } > ('./modules/*.ts', { eager: true }))
+    .forEach(i => i.install?.(ctx))
 })
 ```
 

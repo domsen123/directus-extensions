@@ -1,5 +1,5 @@
 import { renderToString } from 'vue/server-renderer'
-import { renderHeadToString } from '@vueuse/head'
+import { renderSSRHead } from '@unhead/ssr'
 import type { ServerHandler, SharedServerOptions } from '../types'
 import { createApp } from './entry-shared'
 
@@ -60,7 +60,8 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
     ...options,
     ...renderOptions,
   }
-  if (skipRender) return sharedServerOptions
+  if (skipRender)
+    return sharedServerOptions
 
   const {
     app,
@@ -69,24 +70,20 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
     directus,
   } = await createApp(App, sharedServerOptions, hook)
 
-  router.beforeEach((to) => {
-    to.meta.state = initialState || null
-  })
-
   app.use(router)
   router.push(url)
 
   await router.isReady()
 
-  Object.assign(
-    initialState || {},
-    (router.currentRoute.value.meta || {}).state || {},
-  )
-
   const ctx: any = {}
   const appHtml = await renderToString(app, ctx)
-  const appParts = await renderHeadToString(head)
+  const appParts = await renderSSRHead(head)
   const preloadedLinks = renderPreloadLinks(ctx.modules, manifest)
+
+  Object.assign(
+    initialState || {},
+    { routeState: (router.currentRoute.value.meta || {}).state || {} },
+  )
 
   return {
     appHtml,

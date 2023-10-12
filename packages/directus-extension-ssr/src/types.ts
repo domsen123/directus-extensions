@@ -1,5 +1,5 @@
 import type { AuthenticationClient, AuthenticationData, DirectusClient, GraphqlClient, RestClient, WebSocketClient } from '@directus/sdk'
-import type { HeadClient } from '@vueuse/head'
+import type { VueHeadClient } from '@unhead/vue'
 import type { Request, Response } from 'express'
 import type { App, Component, InjectionKey } from 'vue'
 import type { Router } from 'vue-router'
@@ -10,13 +10,13 @@ type AnyItem = Record<string, any>
 
 export interface InitialState extends AnyItem {
   access_token: string | null
-  directusCredentials: AuthenticationData | null
+  refresh_token: string | null
 }
 export interface SharedResult {
   app: App
   router: Router
   directus: AppDirectusClient
-  head: HeadClient<NonNullable<unknown>>
+  head: VueHeadClient<NonNullable<unknown>>
 }
 
 export type SharedServerOptions = {
@@ -44,6 +44,9 @@ export interface UserOptions {
 }
 export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void | RenderFn>
 
+export interface DirectusSchema extends Record<string | number | symbol, unknown> {
+}
+
 export interface ExtendedAuthenticationClient extends AuthenticationClient<DirectusSchema> {
   setCredentials: (data: AuthenticationData) => void
   getCredentials: () => Promise<AuthenticationData | null>
@@ -51,8 +54,11 @@ export interface ExtendedAuthenticationClient extends AuthenticationClient<Direc
   setToken: (access_token: string | null) => Promise<void>
 }
 
-export interface DirectusSchema {}
-export type AppDirectusClient = DirectusClient<DirectusSchema> & ExtendedAuthenticationClient & RestClient<DirectusSchema> & GraphqlClient<DirectusSchema> & WebSocketClient<DirectusSchema>
+export type AppDirectusClient = DirectusClient<DirectusSchema>
+& AuthenticationClient<DirectusSchema>
+& RestClient<DirectusSchema>
+& GraphqlClient<DirectusSchema>
+& WebSocketClient<DirectusSchema>
 
 export type RenderFn = (options: RenderOptions) => Promise<RenderResult | SharedServerOptions>
 export interface RenderOptions {

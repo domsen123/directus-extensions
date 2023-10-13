@@ -1,6 +1,0 @@
-.u-spinner {
-  @apply w-8 h-8 flex flex-1 items-center justify-center;
-  .u-spinner--icon {
-    @apply flex flex-1 items-center justify-center;
-  }
-}

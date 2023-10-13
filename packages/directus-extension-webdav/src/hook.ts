@@ -4,10 +4,6 @@ import type { HookConfig } from '@directus/types'
 import type { Application } from 'express'
 
 class DirectusFileSystemSerializer implements webdav.FileSystemSerializer {
-  constructor() {
-
-  }
-
   uid(): string {
     return 'WebFileSystemSerializer_1.0.0'
   }
@@ -61,6 +57,10 @@ class DirectusFileSystem extends webdav.FileSystem {
     console.log('_type', path)
     callback(undefined, webdav.ResourceType.File)
   }
+
+  readDir(ctx: webdav.RequestContext, path: webdav.Path, callback: webdav.ReturnCallback<string[]>): void {
+    callback(undefined, ['test.txt'])
+  }
 }
 
 export const config: HookConfig = defineHook(async ({ init }, { services, getSchema, database }) => {
@@ -71,23 +71,8 @@ export const config: HookConfig = defineHook(async ({ init }, { services, getSch
     const schema = await getSchema()
 
     const itemService = new ItemsService('directus_files', { schema, knex: database })
-    const server = new webdav.WebDAVServer()
-    server.afterRequest((ctx) => {
-      const ctxMethod = ctx.request.method?.toLowerCase()
-      const ctxPath = ctx.requested.path
-
-      console.log('afterRequest')
-      console.log('method', ctxMethod)
-      console.log('ctxPath', ctxPath)
-
-      ctx.setCode(webdav.HTTPCodes.OK)
-
-      ctx.getResource((e, resource) => {
-        console.log('path', resource?.path)
-        ctx.response.write(JSON.stringify([
-          { path: '/webdav/test.txt', name: 'test.txt' },
-        ]))
-      })
+    const server = new webdav.WebDAVServer({
+      rootFileSystem: new DirectusFileSystem(),
     })
 
     app.use(webdav.extensions.express('/webdav', server))

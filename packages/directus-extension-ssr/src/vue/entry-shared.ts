@@ -1,48 +1,10 @@
 import { createSSRApp } from 'vue'
 import { type Router, createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { createHead } from '@unhead/vue'
-import type { AuthenticationData, AuthenticationStorage } from '@directus/sdk'
-import { authentication, createDirectus, graphql, realtime, rest } from '@directus/sdk'
-import type { Request } from 'express'
-import type { AppDirectusClient, DirectusSchema, SharedHandler } from '../types'
-
-// import { authentication } from './directus/authentication'
-
-export const memoryStorage = () => {
-  let store: AuthenticationData | null = null
-
-  return {
-    get: async () => store,
-    set: async (value: AuthenticationData | null) => {
-      store = value
-    },
-  } as AuthenticationStorage
-}
-
-const getDirectus = (isClient: boolean, storage: AuthenticationStorage, PUBLIC_URL: string): AppDirectusClient => {
-  const isServer = !isClient
-
-  return createDirectus<DirectusSchema>(PUBLIC_URL)
-    .with(authentication(isServer ? 'json' : 'cookie', { storage }))
-    .with(rest())
-    .with(graphql())
-    .with(realtime({
-      authMode: 'public',
-    }))
-}
-
-export const getCookieValue = (req: Request, cookieName: string): string | null => {
-  const cookieHeader = req.headers.cookie
-  if (cookieHeader) {
-    const cookies = cookieHeader.split('; ')
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split('=')
-      if (name === cookieName)
-        return value
-    }
-  }
-  return null
-}
+import type { AuthenticationData } from '@directus/sdk'
+import { authentication, createDirectus, graphql, memoryStorage, realtime, rest } from '@directus/sdk'
+import type { DirectusSchema, SharedHandler } from '../types'
+import { getCookieValue } from '../utils'
 
 const scrollBehavior: Router['options']['scrollBehavior'] = (_, __, savedPosition) => {
   return savedPosition || { top: 0 }
@@ -57,7 +19,16 @@ export const createApp: SharedHandler = async (App, options, hook) => {
 
   const publicUrl: string = 'env' in options ? options.env.PUBLIC_URL : `${new URL(window.location.href).origin}/`
 
-  const directus = getDirectus(isClient, storage, publicUrl)
+  const directus = createDirectus<DirectusSchema>(publicUrl)
+    .with(authentication(!isClient ? 'json' : 'cookie', { storage }))
+    .with(rest(options.directusOptions?.restConfig ? options.directusOptions.restConfig(options) : undefined))
+    .with(graphql(options.directusOptions?.graphqlConfig ? options.directusOptions.graphqlConfig(options) : undefined))
+    .with(realtime(
+      options.directusOptions?.webSocketConfig
+        ? options.directusOptions.webSocketConfig(options)
+        : { authMode: 'public' },
+    ))
+
   try {
     if (!isClient) {
       const { req, env } = options
@@ -84,7 +55,6 @@ export const createApp: SharedHandler = async (App, options, hook) => {
   const app = createSSRApp(App)
   app.provide('directus', directus)
 
-  // @ts-expect-error ...
   const router = createRouter({
     history: !isClient ? createMemoryHistory() : createWebHistory(),
     ...routerOptions,

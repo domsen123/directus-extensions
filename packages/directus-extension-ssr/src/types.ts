@@ -1,4 +1,4 @@
-import type { AuthenticationClient, AuthenticationData, DirectusClient, GraphqlClient, RestClient, WebSocketClient } from '@directus/sdk'
+import type { AuthenticationClient, AuthenticationData, DirectusClient, GraphqlClient, GraphqlConfig, RestClient, RestConfig, WebSocketClient, WebSocketConfig } from '@directus/sdk'
 import type { VueHeadClient } from '@unhead/vue'
 import type { Request, Response } from 'express'
 import type { App, Component, InjectionKey } from 'vue'
@@ -34,13 +34,14 @@ export type ClientHandler = (App: Component, options: UserOptions, hook?: (ctx: 
 
 export type ServerHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<RenderFn>
 
-interface RouterOptions extends Omit<Router['options'], 'history' | 'routes'> {
-  routes?: Router['options']['routes']
-  extendRoutes?: (routes?: Router['options']['routes']) => Router['options']['routes']
-}
+type RouterOptions = Omit<Router['options'], 'history'>
 export interface UserOptions {
-  routerType?: 'vue-router' | 'unplugin-vue-router'
   routerOptions: RouterOptions
+  directusOptions?: {
+    restConfig?: (ctx: SharedServerOptions | SharedClientOptions) => Partial<RestConfig> | undefined
+    graphqlConfig?: (ctx: SharedServerOptions | SharedClientOptions) => Partial<GraphqlConfig> | undefined
+    webSocketConfig?: (ctx: SharedServerOptions | SharedClientOptions) => Partial<WebSocketConfig> | undefined
+  }
 }
 export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void | RenderFn>
 

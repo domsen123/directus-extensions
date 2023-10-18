@@ -20,7 +20,6 @@
     "dayjs": "^1.11.10",
     "directus": "^10.6.3",
     "directus-extension-ssr": "workspace:^",
-    "directus-extension-webdav": "workspace:^",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.6",
     "sqlite3": "^5.1.6",

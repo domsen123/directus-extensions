@@ -1,0 +1,54 @@
+{
+  "name": "directus-extension-anon-auth",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "exports": {
+    "./utils": "./dist/utils.js",
+    "./package.json": "./package.json"
+  },
+  "main": "dist/api.cjs",
+  "typesVersions": {
+    "*": {
+      "utils": [
+        "dist/utils.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
+  "directus:extension": {
+    "type": "bundle",
+    "path": {
+      "api": "dist/api.cjs",
+      "app": "dist/app.cjs"
+    },
+    "entries": [
+      {
+        "name": "directus-extension-anon-auth",
+        "type": "endpoint",
+        "source": ""
+      }
+    ],
+    "host": "^10.4.2"
+  },
+  "dependencies": {
+    "@directus/errors": "^0.0.2",
+    "@directus/extensions-sdk": "^10.1.11",
+    "@directus/random": "^0.2.2",
+    "dayjs": "^1.11.10"
+  },
+  "devDependencies": {
+    "@directus/sdk": "^12.0.1",
+    "@directus/types": "^10.1.6",
+    "@types/express": "^4.17.18",
+    "@types/node": "^20.8.4",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2"
+  }
+}

@@ -1,8 +1,8 @@
 {
-  "name": "directus-extension-ssr-wrapper",
+  "name": "directus-extensions",
   "type": "module",
   "version": "1.0.0",
-  "description": "A wrapper project for Directus extension SSR",
+  "description": "directus extensions",
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

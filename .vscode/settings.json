@@ -45,12 +45,6 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-<<<<<<< HEAD
     "**/node_modules": true
   }
-=======
-    "**/node_modules": false
-  },
-  "typescript.tsserver.useSyntaxServer": "always"
->>>>>>> 0348e2278896827fe16343c6b0ba6c0408dec10e
 }

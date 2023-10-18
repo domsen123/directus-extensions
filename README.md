@@ -51,13 +51,9 @@ import Vue from '@vitejs/plugin-vue'
 import DirectusSSR from 'directus-extension-ssr/plugin'
 
 export default defineConfig({
-  [...]
   plugins: [
-    [...]
     DirectusSSR(),
-    [...]
   ],
-  [...]
 })
 ```
 ### THIRD STEP
@@ -137,13 +133,11 @@ SSR_ENV=development npx directus start
 # Build
 Like in any other vite ssr project, extend your `package.json` with the following `vite build scripts`:
 
-```json
+```
 "scripts": {
-  [...]
   "build": "pnpm run build:client && pnpm run build:server",
   "build:client": "vite build --outDir dist/client --ssrManifest",
   "build:server": "vite build --outDir dist/server --ssr src/main.ts"
-  [...]
 }
 ```
 

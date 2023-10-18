@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 declare interface Window {
   __INITIAL_STATE__: any
 }

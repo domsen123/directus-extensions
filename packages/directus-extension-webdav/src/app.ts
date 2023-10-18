@@ -1,6 +1,0 @@
-export const interfaces = []
-export const displays = []
-export const layouts = []
-export const modules = []
-export const panels = []
-export const operations = []

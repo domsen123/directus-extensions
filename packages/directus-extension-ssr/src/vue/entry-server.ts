@@ -53,7 +53,7 @@ const renderPreloadLinks = (modules: string[], manifest: Record<string, string[]
 }
 
 export const handler: ServerHandler = async (App, options, hook?) => async (renderOptions) => {
-  const { skipRender = false, url, manifest, initialState } = renderOptions
+  const { skipRender = false, url, manifest } = renderOptions
 
   const sharedServerOptions: SharedServerOptions = {
     isClient: false,
@@ -64,7 +64,7 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
     return sharedServerOptions
 
   // @ts-expect-error ...
-  const { app, router, head, directus } = await createApp(App, sharedServerOptions, hook)
+  const { app, router, head, directus, initialState } = await createApp(App, sharedServerOptions, hook)
 
   app.use(router)
   router.push(url)

@@ -2,15 +2,15 @@ import type { SharedClientOptions, UserHandler } from '../types'
 import { createApp } from './entry-shared'
 
 export const handler: UserHandler = async (App, options, hook) => {
-  const initialState = window.__INITIAL_STATE__ || {}
+  const _initialState = window.__INITIAL_STATE__ || {}
 
   const sharedClientOptions: SharedClientOptions = {
     isClient: true,
-    initialState,
+    initialState: _initialState,
     ...options,
   }
 
-  const { app, router } = await createApp(App, sharedClientOptions, hook)
+  const { app, router, initialState } = await createApp(App, sharedClientOptions, hook)
 
   let entryRoutePath: string | undefined
   let isFirstRoute = true

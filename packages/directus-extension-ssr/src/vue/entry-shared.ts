@@ -100,5 +100,6 @@ export const createApp: SharedHandler = async (App, options, hook) => {
     head,
     directus,
     storage,
+    initialState,
   }
 }

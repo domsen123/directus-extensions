@@ -17,6 +17,7 @@ export interface SharedResult {
   router: Router
   directus: AppDirectusClient
   head: VueHeadClient<NonNullable<unknown>>
+  initialState: InitialState
 }
 
 export type SharedServerOptions = {

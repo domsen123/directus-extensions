@@ -66,6 +66,8 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
   // @ts-expect-error ...
   const { app, router, head, directus, initialState } = await createApp(App, sharedServerOptions, hook)
 
+  console.log('entry-server', initialState)
+
   app.use(router)
   router.push(url)
 

@@ -87,13 +87,8 @@ export const createApp: SharedHandler = async (App, options, hook) => {
 
   // @ts-expect-error ...
   hook && await hook({ app, router, directus, isClient, initialState, options })
+  console.log('entry-shared', initialState)
 
-  try {
-    await setupDirectus(isClient, directus, initialState, storage, options)
-  }
-  catch (error: any) {
-    // console.error('entry-shared', error)
-  }
   return {
     app,
     router,

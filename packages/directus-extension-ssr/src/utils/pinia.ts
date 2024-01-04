@@ -8,8 +8,8 @@ export const directusSSRPlugin = ({ store }: PiniaPluginContext, ctx: AppContext
 
   if (ctx.isClient)
     store.$state = (ctx.initialState.pinia) || {}
-
-  else ctx.initialState.pinia = store.$state
+  else
+    ctx.initialState.pinia = store.$state
 }
 
 export const useErrorStore = defineStore('error', {
@@ -58,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
     async login(email: string, password: string) {
       try {
         this.isSigningIn = true
-        this.$state.authData = await this.$directus.login(email, password, { mode: 'cookie' })
+        this.$state.authData = await this.$directus.login(email, password)
         await this.setCurrentUser()
       }
       catch (error: any) {
@@ -92,7 +92,9 @@ export const useAuthStore = defineStore('auth', {
           email,
           password,
         }))
-        this.$state.authData = await this.$directus.login(email, password, { mode: 'cookie' })
+        const result = await this.$directus.login(email, password)
+        console.log(result)
+        this.$state.authData = result
         await this.setCurrentUser()
       }
       catch (error: any) {

@@ -63,12 +63,8 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
   if (skipRender)
     return sharedServerOptions
 
-  const {
-    app,
-    router,
-    head,
-    directus,
-  } = await createApp(App, sharedServerOptions, hook)
+  // @ts-expect-error ...
+  const { app, router, head, directus } = await createApp(App, sharedServerOptions, hook)
 
   app.use(router)
   router.push(url)

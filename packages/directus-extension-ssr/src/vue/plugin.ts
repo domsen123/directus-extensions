@@ -1,4 +1,4 @@
-import type { Plugin } from 'vite'
+import type { Plugin, UserConfig } from 'vite'
 
 export default (): Plugin => {
   const name = 'directus-extension-ssr'
@@ -7,8 +7,8 @@ export default (): Plugin => {
   return {
     name,
     enforce: 'pre',
-    config() {
-      return {
+    config(config) {
+      const cfg: Omit<UserConfig, 'plugins'> = {
         ssr: {
           noExternal: [
             'directus-extension-ssr',
@@ -18,10 +18,16 @@ export default (): Plugin => {
           assetsDir: '$assets',
           target: 'esnext',
         },
-        optimizeDeps: {
-          exclude: ['vue-router/auto'],
-        },
       }
+
+      if (!config.build?.ssr) {
+        cfg.build = {
+          ...cfg.build ?? {},
+          ssrManifest: 'ssr-manifest.json',
+        }
+      }
+
+      return cfg
     },
     resolveId(source) {
       if (source === 'directus-extension-ssr')

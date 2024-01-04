@@ -2,12 +2,12 @@
 import { displayThumbnail, useAuthStore } from 'directus-extension-ssr/utils'
 import avatar from '~/assets/img/placeholders/avatar.webp'
 
-const authStore = useAuthStore()
+// const authStore = useAuthStore()
 </script>
 
 <template>
   <v-app-bar scroll-behavior="elevate" theme="dark">
-    <v-container class="flex items-center">
+    <!-- <v-container class="flex items-center">
       <div class="uppercase">
         <span class="text-primary font-bold">directus</span>extension<span class="text-primary font-bold">ssr</span>
       </div>
@@ -26,6 +26,6 @@ const authStore = useAuthStore()
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-container>
+    </v-container> -->
   </v-app-bar>
 </template>

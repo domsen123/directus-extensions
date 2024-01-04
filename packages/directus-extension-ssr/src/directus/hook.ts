@@ -1,13 +1,13 @@
 import path from 'node:path'
 import process from 'node:process'
 import { readFileSync } from 'node:fs'
+import type { HookConfig } from '@directus/extensions'
 import { defineHook } from '@directus/extensions-sdk'
 import { static as serveStatic } from 'express'
 import ms from 'ms'
 import devalue from '@nuxt/devalue'
 import type { Application } from 'express'
 import type { ViteDevServer } from 'vite'
-import type { HookConfig } from '@directus/types'
 import type { InitialState, RenderFn, RenderResult } from '../types'
 
 const DIRECTUS_ROUTES = [

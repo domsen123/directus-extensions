@@ -1,6 +1,7 @@
 import { handler } from 'directus-extension-ssr'
 import { useAuthStore } from 'directus-extension-ssr/utils'
 import { setupLayouts } from 'virtual:generated-layouts'
+import { v4 as uuidv4 } from 'uuid'
 import App from './App.vue'
 import type { UserModule } from './types'
 import routes from '~pages'
@@ -19,4 +20,9 @@ export default handler(App, {
 
   const authStore = useAuthStore()
   await authStore.setCurrentUser()
+
+  if (!authStore.isAuthenticated) {
+    const uuid = uuidv4()
+    await authStore.register('Anon', 'User', `${uuid}@anon.ai`, uuid)
+  }
 })

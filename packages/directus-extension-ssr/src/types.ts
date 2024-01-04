@@ -28,11 +28,11 @@ export type SharedClientOptions = {
   initialState: InitialState
 } & UserOptions
 
-export type SharedHandler = (App: Component, options: SharedServerOptions | SharedClientOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<SharedResult>
+export type SharedHandler = (App: Component, options: SharedServerOptions | SharedClientOptions, hook?: (ctx: AppClientContext | AppServerContext) => Promise<void>) => Promise<SharedResult>
 
-export type ClientHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void>
+export type ClientHandler = (App: Component, options: UserOptions, hook?: (ctx: AppClientContext) => Promise<void>) => Promise<void>
 
-export type ServerHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<RenderFn>
+export type ServerHandler = (App: Component, options: UserOptions, hook?: (ctx: AppServerContext) => Promise<void>) => Promise<RenderFn>
 
 type RouterOptions = Omit<Router['options'], 'history'>
 export interface UserOptions {
@@ -43,7 +43,7 @@ export interface UserOptions {
     webSocketConfig?: (ctx: SharedServerOptions | SharedClientOptions) => Partial<WebSocketConfig> | undefined
   }
 }
-export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppContext) => Promise<void>) => Promise<void | RenderFn>
+export type UserHandler = (App: Component, options: UserOptions, hook?: (ctx: AppClientContext | AppServerContext) => Promise<void>) => Promise<void | RenderFn>
 
 export interface DirectusSchema extends Record<string | number | symbol, unknown> {
 }
@@ -100,9 +100,19 @@ export interface AppContext {
   app: App
   router: Router
   directus: AppDirectusClient
-  isClient: boolean
   initialState: InitialState
+  isClient: boolean
 }
+
+export type AppClientContext = {
+  isClient: true
+  options: SharedClientOptions
+} & AppContext
+
+export type AppServerContext = {
+  isClient: false
+  options: SharedServerOptions
+} & AppContext
 
 export const InjectDirectus: InjectionKey<DirectusClient<DirectusSchema>> = Symbol('Directus')
 

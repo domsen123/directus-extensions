@@ -1,7 +1,7 @@
-import type { ClientHandler, SharedClientOptions } from '../types'
+import type { SharedClientOptions, UserHandler } from '../types'
 import { createApp } from './entry-shared'
 
-export const handler: ClientHandler = async (App, options, hook) => {
+export const handler: UserHandler = async (App, options, hook) => {
   const initialState = window.__INITIAL_STATE__ || {}
 
   const sharedClientOptions: SharedClientOptions = {

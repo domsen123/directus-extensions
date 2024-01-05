@@ -1,6 +1,6 @@
 import { renderToString } from 'vue/server-renderer'
 import { renderSSRHead } from '@unhead/ssr'
-import type { ServerHandler, SharedServerOptions } from '../types'
+import type { ServerHandler, SharedHookFn, SharedServerOptions } from '../types'
 import { createApp } from './entry-shared'
 
 const renderPreloadLink = (file: string): string => {
@@ -63,10 +63,7 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
   if (skipRender)
     return sharedServerOptions
 
-  // @ts-expect-error ...
-  const { app, router, head, directus, initialState } = await createApp(App, sharedServerOptions, hook)
-
-  console.log('entry-server', initialState)
+  const { app, router, head, directus, initialState } = await createApp(App, sharedServerOptions, hook as SharedHookFn)
 
   app.use(router)
   router.push(url)

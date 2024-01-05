@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<template>
+  <div>index.vue</div>
+</template>
 
+<script lang="ts" setup>
+  
 </script>
 
-<template>
-  <block-hero />
-  <block-features />
-  <block-directus />
-</template>
+<style></style>

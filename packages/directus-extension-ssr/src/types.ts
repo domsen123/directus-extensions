@@ -29,7 +29,8 @@ export type SharedClientOptions = {
   initialState: InitialState
 } & UserOptions
 
-export type SharedHandler = (App: Component, options: SharedServerOptions | SharedClientOptions, hook?: (ctx: AppClientContext | AppServerContext) => Promise<void>) => Promise<SharedResult>
+export type SharedHookFn = (ctx: AppContext) => Promise<void>
+export type SharedHandler = (App: Component, options: SharedServerOptions | SharedClientOptions, hook?: SharedHookFn) => Promise<SharedResult>
 
 export type ClientHandler = (App: Component, options: UserOptions, hook?: (ctx: AppClientContext) => Promise<void>) => Promise<void>
 
@@ -56,11 +57,18 @@ export interface ExtendedAuthenticationClient extends AuthenticationClient<Direc
   setToken: (access_token: string | null) => Promise<void>
 }
 
-export type AppDirectusClient = DirectusClient<DirectusSchema>
-& AuthenticationClient<DirectusSchema>
-& RestClient<DirectusSchema>
-& GraphqlClient<DirectusSchema>
-& WebSocketClient<DirectusSchema>
+export interface SSRExtension<_Schema extends object> {
+  setAccessToken: (access_token: string | null) => Promise<void>
+  setRefreshToken: (refresh_token: string | null) => Promise<void>
+  setAuthData: (data: AuthenticationData) => Promise<void>
+}
+
+export type AppDirectusClient<_Schema extends object = object> = DirectusClient<_Schema>
+& AuthenticationClient<_Schema>
+& RestClient<_Schema>
+& GraphqlClient<_Schema>
+& WebSocketClient<_Schema>
+& SSRExtension<_Schema>
 
 export type RenderFn = (options: RenderOptions) => Promise<RenderResult | SharedServerOptions>
 export interface RenderOptions {
@@ -97,23 +105,24 @@ export interface ComponentRecordRaw {
   props?: ComponentRecordProps[]
 }
 
-export interface AppContext {
+export interface AppContextShared {
   app: App
   router: Router
   directus: AppDirectusClient
   initialState: InitialState
-  isClient: boolean
 }
 
 export type AppClientContext = {
   isClient: true
   options: SharedClientOptions
-} & AppContext
+} & AppContextShared
 
 export type AppServerContext = {
   isClient: false
   options: SharedServerOptions
-} & AppContext
+} & AppContextShared
+
+export type AppContext = AppServerContext | AppClientContext
 
 export const InjectDirectus: InjectionKey<DirectusClient<DirectusSchema>> = Symbol('Directus')
 

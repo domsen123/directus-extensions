@@ -54,7 +54,7 @@ export function getMilliseconds(value: unknown, fallback = undefined): number | 
   return ms(String(value)) ?? fallback
 }
 
-export const config: HookConfig = defineHook(async ({ init }, { env }) => {
+export const config: HookConfig = defineHook(async ({ init }, { env, logger }) => {
   init('routes.custom.after', async (ctx) => {
     const app: Application = ctx.app
 
@@ -141,6 +141,8 @@ export const config: HookConfig = defineHook(async ({ init }, { env }) => {
           catch (error: any) {
             res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
           }
+
+          logger.debug('global-initialState', initialState)
 
           const __INITIAL_STATE__ = `  <script>window.__INITIAL_STATE__ = ${devalue(initialState)}</script>`
 

@@ -53,7 +53,7 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['esm'],
-      minify,
+      minify: false,
       dts: true,
       noExternal: ['directus-extension-ssr/types'],
       external,

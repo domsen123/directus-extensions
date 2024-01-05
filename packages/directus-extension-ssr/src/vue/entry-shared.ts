@@ -1,9 +1,8 @@
-import { createSSRApp } from 'vue'
-import { type Router, createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import { type Router } from 'vue-router'
 import { createHead } from '@unhead/vue'
-import type { AuthenticationData, AuthenticationStorage } from '@directus/sdk'
+import type { AuthenticationData } from '@directus/sdk'
 import { authentication, createDirectus, graphql, memoryStorage, realtime, rest } from '@directus/sdk'
-import type { DirectusSchema, InitialState, SharedClientOptions, SharedHandler, SharedServerOptions } from '../types'
+import type { AppDirectusClient, DirectusSchema, InitialState, SharedClientOptions, SharedHandler, SharedServerOptions } from '../types'
 import { getCookieValue } from '../utils'
 
 const scrollBehavior: Router['options']['scrollBehavior'] = (_, __, savedPosition) => {
@@ -12,35 +11,20 @@ const scrollBehavior: Router['options']['scrollBehavior'] = (_, __, savedPositio
 
 const setupDirectus = async (
   isClient: boolean,
-  directus: any,
+  directus: AppDirectusClient,
   initialState: InitialState,
-  storage: AuthenticationStorage,
   options?: SharedServerOptions | SharedClientOptions,
 ) => {
   if (isClient) {
     if (initialState.access_token)
-      directus.setToken(initialState.access_token)
+      await directus.setAccessToken(initialState.access_token)
   }
   else {
     const { req, env } = options as SharedServerOptions
 
     const refresh_token = getCookieValue(req, env.REFRESH_TOKEN_COOKIE_NAME)
-
-    if (initialState.pinia?.authData?.access_token) {
-      const data = await storage.get() as AuthenticationData
-      storage.set({
-        ...data,
-        access_token: initialState.pinia?.authData?.access_token,
-        refresh_token: initialState.pinia?.authData?.refresh_token,
-      })
-
-      initialState.access_token = initialState.pinia?.authData?.access_token
-      initialState.refresh_token = initialState.pinia?.authData?.refresh_token
-    }
-    else if (refresh_token) {
-      const data = await storage.get() as AuthenticationData
-      storage.set({ ...data, refresh_token })
-
+    if (refresh_token) {
+      await directus.setRefreshToken(refresh_token)
       const authData = await directus.refresh()
       initialState.access_token = authData.access_token
       initialState.refresh_token = authData.refresh_token
@@ -66,28 +50,44 @@ export const createApp: SharedHandler = async (App, options, hook) => {
         ? options.directusOptions.webSocketConfig(options)
         : { authMode: 'public' },
     ))
+    .with(() => ({
+      setAccessToken: async (access_token: string | null = null) => {
+        const data = await storage.get() as AuthenticationData
+        initialState.access_token = access_token
+        await storage.set({ ...data, access_token })
+      },
+      setRefreshToken: async (refresh_token: string | null = null) => {
+        const data = await storage.get() as AuthenticationData
+        initialState.refresh_token = refresh_token
+        await storage.set({ ...data, refresh_token })
+      },
+      setAuthData: async (data: AuthenticationData) => {
+        initialState.access_token = data.access_token
+        initialState.refresh_token = data.refresh_token
+        await storage.set(data)
+      },
+    }))
 
   try {
-    await setupDirectus(isClient, directus, initialState, storage, options)
+    await setupDirectus(isClient, directus, initialState, options)
   }
   catch (error: any) {
     // console.error('entry-shared', error)
   }
 
-  const app = createSSRApp(App)
+  const app = (await import('vue')).createSSRApp(App)
   app.provide('directus', directus)
 
-  const router = createRouter({
-    history: !isClient ? createMemoryHistory() : createWebHistory(),
+  const router = (await import('vue-router')).createRouter({
+    history: !isClient ? (await import('vue-router')).createMemoryHistory() : (await import('vue-router')).createWebHistory(),
     ...routerOptions,
   })
 
   const head = createHead()
   app.use(head)
 
-  // @ts-expect-error ...
+  // @ts-expect-error stfu!
   hook && await hook({ app, router, directus, isClient, initialState, options })
-  console.log('entry-shared', initialState)
 
   return {
     app,

@@ -8,9 +8,9 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "1.0.0-beta.19",
-    "@types/node": "^20.8.2",
-    "eslint": "^8.50.0",
-    "typescript": "^5.2.2"
+    "@antfu/eslint-config": "2.6.1",
+    "@types/node": "^20.10.6",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
   }
 }

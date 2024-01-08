@@ -1,4 +1,4 @@
-import { type Router } from 'vue-router'
+import type { Router } from 'vue-router'
 import { createHead } from '@unhead/vue'
 import type { AuthenticationData } from '@directus/sdk'
 import { authentication, createDirectus, graphql, memoryStorage, realtime, rest } from '@directus/sdk'
@@ -86,8 +86,13 @@ export const createApp: SharedHandler = async (App, options, hook) => {
   const head = createHead()
   app.use(head)
 
-  // @ts-expect-error stfu!
-  hook && await hook({ app, router, directus, isClient, initialState, options })
+  try {
+    // @ts-expect-error stfu!
+    hook && await hook({ app, router, directus, isClient, initialState, options })
+  }
+  catch (error: any) {
+    console.error(error)
+  }
 
   return {
     app,

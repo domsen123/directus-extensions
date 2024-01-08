@@ -1,5 +1,5 @@
-import { type RestCommand } from '@directus/sdk'
-import { type Request } from 'express'
+import type { RestCommand } from '@directus/sdk'
+import type { Request } from 'express'
 
 export const parseCookie = (str: string): Record<string, string> => {
   return str
@@ -18,7 +18,7 @@ export const getCookieValue = (cookieName: string, cookieString?: string): strin
   return cookies[cookieName]
 }
 
-type ApplyRestConfig = ({ isClient, req }: { isClient: boolean; req?: Request }) => (init: RequestInit) => RequestInit
+type ApplyRestConfig = ({ isClient, req }: { isClient: boolean, req?: Request }) => (init: RequestInit) => RequestInit
 export const applyRestConfig: ApplyRestConfig = ({ isClient, req }) => (init) => {
   if (isClient)
     init.credentials = 'same-origin'

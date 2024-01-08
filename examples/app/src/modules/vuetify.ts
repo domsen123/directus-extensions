@@ -1,6 +1,6 @@
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
-import { type UserModule } from '~/types'
+import type { UserModule } from '~/types'
 
 const colors = {
   primary: '#FF546C',

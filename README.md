@@ -142,14 +142,13 @@ Like in any other vite ssr project, extend your `package.json` with the followin
 ```
 
 # Prod
-after build - run: 
+after build - run:
 ```
 npx directus start
 ```
 easy as hell 😈
 
-
-# Try it 
+# Try it
 
 Check out: examples/app
 

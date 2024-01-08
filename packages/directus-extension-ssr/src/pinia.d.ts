@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import 'pinia'
 import type { AppDirectusClient } from './types'
 

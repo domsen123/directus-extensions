@@ -64,11 +64,11 @@ export interface SSRExtension<_Schema extends object> {
 }
 
 export type AppDirectusClient<_Schema extends object = object> = DirectusClient<_Schema>
-& AuthenticationClient<_Schema>
-& RestClient<_Schema>
-& GraphqlClient<_Schema>
-& WebSocketClient<_Schema>
-& SSRExtension<_Schema>
+  & AuthenticationClient<_Schema>
+  & RestClient<_Schema>
+  & GraphqlClient<_Schema>
+  & WebSocketClient<_Schema>
+  & SSRExtension<_Schema>
 
 export type RenderFn = (options: RenderOptions) => Promise<RenderResult | SharedServerOptions>
 export interface RenderOptions {
@@ -83,7 +83,7 @@ export interface RenderOptions {
 export interface RenderResult {
   appHtml: string
   preloadedLinks: string
-  appParts: { headTags: string; htmlAttrs: string; bodyAttrs: string; bodyTags: string }
+  appParts: { headTags: string, htmlAttrs: string, bodyAttrs: string, bodyTags: string }
   directus: AppDirectusClient
 }
 

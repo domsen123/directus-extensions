@@ -1,4 +1,4 @@
-import { type PiniaPluginContext } from 'pinia'
+import type { PiniaPluginContext } from 'pinia'
 import type { AppContext } from '../types'
 
 export const directusSSRPlugin = ({ store, pinia }: PiniaPluginContext, ctx: AppContext) => {

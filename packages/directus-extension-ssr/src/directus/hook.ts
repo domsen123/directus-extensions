@@ -1,7 +1,6 @@
 import path from 'node:path'
 import process from 'node:process'
 import { readFileSync } from 'node:fs'
-import type { HookConfig } from '@directus/extensions'
 import { defineHook } from '@directus/extensions-sdk'
 import { static as serveStatic } from 'express'
 import ms from 'ms'
@@ -53,6 +52,8 @@ export function getMilliseconds(value: unknown, fallback = undefined): number | 
 
   return ms(String(value)) ?? fallback
 }
+
+type HookConfig = ReturnType<typeof defineHook>
 
 export const config: HookConfig = defineHook(async ({ init }, { env, logger }) => {
   init('routes.custom.after', async (ctx) => {
@@ -112,7 +113,6 @@ export const config: HookConfig = defineHook(async ({ init }, { env, logger }) =
             appHtml,
             preloadedLinks,
             appParts: { headTags, htmlAttrs, bodyAttrs, bodyTags },
-            directus,
           } = await render({
             skipRender: false,
             url,
@@ -123,24 +123,24 @@ export const config: HookConfig = defineHook(async ({ init }, { env, logger }) =
             env,
           }) as RenderResult
 
-          try {
-            if (directus && initialState.refresh_token) {
-              const cookieOptions = {
-                httpOnly: true,
-                domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
-                maxAge: getMilliseconds<number>(env.REFRESH_TOKEN_TTL),
-                secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
-                sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
-              }
-              res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, initialState.refresh_token, cookieOptions)
-            }
-            else {
-              res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
-            }
-          }
-          catch (error: any) {
-            res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
-          }
+          // try {
+          //   if (directus && initialState.refresh_token) {
+          //     const cookieOptions = {
+          //       httpOnly: true,
+          //       domain: env.REFRESH_TOKEN_COOKIE_DOMAIN,
+          //       maxAge: getMilliseconds<number>(env.REFRESH_TOKEN_TTL),
+          //       secure: env.REFRESH_TOKEN_COOKIE_SECURE ?? false,
+          //       sameSite: (env.REFRESH_TOKEN_COOKIE_SAME_SITE as 'lax' | 'strict' | 'none') || 'strict',
+          //     }
+          //     res.cookie(env.REFRESH_TOKEN_COOKIE_NAME, initialState.refresh_token, cookieOptions)
+          //   }
+          //   else {
+          //     res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
+          //   }
+          // }
+          // catch (error: any) {
+          //   res.clearCookie(env.REFRESH_TOKEN_COOKIE_NAME)
+          // }
 
           logger.debug('global-initialState', initialState)
 

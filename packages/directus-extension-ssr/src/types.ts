@@ -1,7 +1,8 @@
+import type { defineHook } from '@directus/extensions-sdk'
 import type { AuthenticationClient, AuthenticationData, DirectusClient, GraphqlClient, GraphqlConfig, RestClient, RestConfig, WebSocketClient, WebSocketConfig } from '@directus/sdk'
 import type { VueHeadClient } from '@unhead/vue'
 import type { Request, Response } from 'express'
-import type { App, Component, InjectionKey } from 'vue'
+import type { Component, InjectionKey } from 'vue'
 import type { Router } from 'vue-router'
 
 export type Lazy<T> = () => Promise<T>
@@ -13,8 +14,8 @@ export interface InitialState extends AnyItem {
   refresh_token: string | null
 }
 export interface SharedResult {
-  app: App
-  router: Router
+  app: import('vue').App
+  router: import('vue-router').Router
   directus: AppDirectusClient
   head: VueHeadClient<NonNullable<unknown>>
   initialState: InitialState
@@ -106,8 +107,8 @@ export interface ComponentRecordRaw {
 }
 
 export interface AppContextShared {
-  app: App
-  router: Router
+  app: import('vue').App
+  router: import('vue-router').Router
   directus: AppDirectusClient
   initialState: InitialState
 }
@@ -143,3 +144,5 @@ export interface CurrentUser {
   email: string
   avatar: string
 }
+
+export type HookConfig = ReturnType<typeof defineHook>

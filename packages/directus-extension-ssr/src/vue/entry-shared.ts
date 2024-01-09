@@ -67,13 +67,12 @@ export const createApp: SharedHandler = async (App, options, hook) => {
         await storage.set(data)
       },
     }))
-
-  try {
-    await setupDirectus(isClient, directus, initialState, options)
-  }
-  catch (error: any) {
-    // console.error('entry-shared', error)
-  }
+  // try {
+  //   await setupDirectus(isClient, directus, initialState, options)
+  // }
+  // catch (error: any) {
+  //   // console.error('entry-shared', error)
+  // }
 
   const app = (await import('vue')).createSSRApp(App)
   app.provide('directus', directus)
@@ -86,9 +85,17 @@ export const createApp: SharedHandler = async (App, options, hook) => {
   const head = createHead()
   app.use(head)
 
+  const ctx: any = {
+    app,
+    router,
+    directus,
+    isClient,
+    initialState,
+    options,
+  }
+
   try {
-    // @ts-expect-error stfu!
-    hook && await hook({ app, router, directus, isClient, initialState, options })
+    hook && await hook(ctx)
   }
   catch (error: any) {
     console.error(error)

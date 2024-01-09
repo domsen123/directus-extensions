@@ -160,7 +160,7 @@ export const config: HookConfig = defineHook(async ({ init }, { env, logger }) =
         }
         catch (error: any) {
           vite && vite.ssrFixStacktrace(error)
-          console.error('global-error', error)
+          // console.error('global-error', error)
           res.status(500).send(error.stack || error)
         }
       }

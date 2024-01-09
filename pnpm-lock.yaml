@@ -129,6 +129,9 @@ importers:
 
   examples/clean:
     dependencies:
+      '@directus/sdk':
+        specifier: ^14.0.0
+        version: 14.0.0
       '@unocss/reset':
         specifier: ^0.58.3
         version: 0.58.3
@@ -2795,7 +2798,6 @@ packages:
   /@directus/sdk@14.0.0:
     resolution: {integrity: sha512-xxX20VpdwKXR5O1QNo1HXY3hF8sulOjTdio+zWELLGsSnW4asXT32VLGhiPSl9gtZ2ctSnsrU29k5ACYD2WoRQ==}
     engines: {node: '>=18.0.0'}
-    dev: true
 
   /@directus/shared@9.24.0:
     resolution: {integrity: sha512-NMLhwi4K5URm312DKvCg1tn5DiUaK8adteu1oWK6IvNazYkdFGMcjqErSpfD13U77Hk/senzK5BXBofXH0n6MQ==}

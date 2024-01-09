@@ -14,6 +14,7 @@
     "build:server": "vite build --outDir dist/server --ssr src/main.ts"
   },
   "dependencies": {
+    "@directus/sdk": "^14.0.0",
     "@unocss/reset": "^0.58.3",
     "@vueuse/core": "^10.7.1",
     "@vueuse/router": "^10.7.1",

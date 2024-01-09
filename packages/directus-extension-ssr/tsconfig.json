@@ -11,13 +11,12 @@
     },
     "resolveJsonModule": true,
     "types": [
-      "vite/client",
-      "@directus/types"
+      "vite/client"
     ],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,

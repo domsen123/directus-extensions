@@ -10,7 +10,7 @@ export type Lazy<T> = () => Promise<T>
 type AnyItem = Record<string, any>
 
 export interface InitialState extends AnyItem {
-  access_token: string | null
+  // access_token: string | null
   refresh_token: string | null
 }
 export interface SharedResult {
@@ -31,7 +31,8 @@ export type SharedClientOptions = {
 } & UserOptions
 
 export type SharedHookFn = (ctx: AppContext) => Promise<void>
-export type SharedHandler = (App: Component, options: SharedServerOptions | SharedClientOptions, hook?: SharedHookFn) => Promise<SharedResult>
+
+export type SharedHandler = (App: Component, options: SharedServerOptions | SharedClientOptions) => Promise<SharedServerOptions | SharedClientOptions>
 
 export type ClientHandler = (App: Component, options: UserOptions, hook?: (ctx: AppClientContext) => Promise<void>) => Promise<void>
 

@@ -1,7 +1,7 @@
-import type { SharedClientOptions, UserHandler } from '../types'
+import type { ClientHandler, SharedClientOptions } from '../types/index'
 import { createApp } from './entry-shared'
 
-export const handler: UserHandler = async (App, options, hook) => {
+export const handler: ClientHandler = async (App, options, hook) => {
   const initialState = window.__INITIAL_STATE__ || {}
 
   const sharedClientOptions: SharedClientOptions = {
@@ -10,7 +10,26 @@ export const handler: UserHandler = async (App, options, hook) => {
     ...options,
   }
 
-  const { app, router } = await createApp(App, sharedClientOptions, hook)
+  const { app, router, head, directus, storage } = await createApp(App, sharedClientOptions)
+  if (initialState.refresh_token) {
+    try {
+      await directus.refresh()
+    }
+    catch (error: any) {
+
+    }
+  }
+
+  hook && await hook({
+    app,
+    router,
+    head,
+    directus,
+    storage,
+    initialState: sharedClientOptions.initialState,
+    isClient: sharedClientOptions.isClient,
+    options: sharedClientOptions,
+  })
 
   let entryRoutePath: string | undefined
   let isFirstRoute = true
@@ -19,7 +38,7 @@ export const handler: UserHandler = async (App, options, hook) => {
       // The first route is rendered in the server and its state is provided globally.
       isFirstRoute = false
       entryRoutePath = to.path
-      to.meta.state = initialState.routeState
+      to.meta.state = initialState.routeState ?? {}
     }
   })
 

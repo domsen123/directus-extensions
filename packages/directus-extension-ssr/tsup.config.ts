@@ -21,7 +21,7 @@ export default defineConfig(() => {
   return [
     {
       entry: {
-        index: './src/types.ts',
+        index: './src/types/index.ts',
       },
       outDir: 'dist/types',
       clean: false,

@@ -2,8 +2,9 @@
 import { useServerState } from 'directus-extension-ssr/utils'
 import type { SSRDirectusClient } from 'directus-extension-ssr/types'
 import { readMe } from '@directus/sdk'
+import type { ISchema } from '~/interfaces'
 
-const directus = inject('directus') as SSRDirectusClient
+const directus = inject('directus') as SSRDirectusClient<ISchema>
 
 const fetchCurrentUser = async () => {
   return await directus.request(readMe())

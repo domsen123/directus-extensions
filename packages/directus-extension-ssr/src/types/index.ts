@@ -18,9 +18,6 @@ export interface RenderOptions {
   env: Record<string, any>
 }
 
-export interface Schema extends Record<string | number | symbol, unknown> {
-}
-
 export interface SSRExtension<_Schema extends object> {
   setAccessToken: (access_token: string | null) => Promise<void>
   setRefreshToken: (refresh_token: string | null) => Promise<void>

@@ -82,5 +82,17 @@ export default defineConfig(() => {
       dts: true,
       external,
     },
+    {
+      entry: {
+        index: './src/services/index.ts',
+      },
+      outDir: 'dist/services',
+      clean: false,
+      target: 'esnext',
+      format: ['esm'],
+      minify,
+      dts: true,
+      external,
+    },
   ]
 })

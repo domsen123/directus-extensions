@@ -49,6 +49,9 @@ export default defineConfig({
       dts: 'src/components.d.ts',
     }),
   ],
+  optimizeDeps: {
+    include: ['vue'],
+  },
   ssr: {
     noExternal: [],
   },

@@ -40,9 +40,12 @@ export class ItemService<Schema extends object> {
     const promise = this.requestService.cachedRequest(command)
     const items = await promise
 
-    const storedItems = this.storeItems(collection, items.slice()) as Awaited<typeof promise>
+    if (items.length === 0)
+      return items
 
-    return query.limit === 1 ? this.firstOrNull(storedItems) : storedItems
+    const storedItems = this.storeItems(collection, items) as Awaited<typeof promise>
+
+    return storedItems
   }
 
   async readItem<Collection extends RegularCollections<Schema>, TQuery extends Query<Schema, CollectionType<Schema, Collection>>>(collection: Collection, key: string, query?: TQuery) {
@@ -50,15 +53,20 @@ export class ItemService<Schema extends object> {
 
     const promise = this.requestService.cachedRequest(command)
 
-    // // check if item is already in store and all fields are present
+    // check if item is already in store and all fields are present
     // const stateItem = this.getItem(collection, key) as Awaited<typeof promise>
+
     // if (query && query.fields && !query.fields.includes('*')) {
     //   const hasAllFields = query.fields.every(f => stateItem && f as keyof typeof stateItem in stateItem)
+    //   console.log('hasAllFields', hasAllFields)
     //   if (hasAllFields)
-    //     return stateItem
+    //     return { ...stateItem, __cached: true }
     // }
-
     const item = await promise
+    console.log('item', item)
+
+    if (!item)
+      return item
 
     const storedItem = this.storeItem(collection, item) as Awaited<typeof promise>
 

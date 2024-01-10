@@ -3,7 +3,7 @@ const route = useRoute()
 </script>
 
 <template>
-  <router-view v-bind="route.meta.state" />
+  <router-view v-bind="route.meta.state ?? {}" />
 </template>
 
 <style></style>

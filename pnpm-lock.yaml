@@ -233,9 +233,6 @@ importers:
       '@directus/extensions-sdk':
         specifier: ^10.3.0
         version: 10.3.0(@types/node@20.10.8)(@unhead/vue@1.8.9)(pinia@2.1.7)(typescript@5.3.3)(vue-router@4.2.5)
-      '@directus/utils':
-        specifier: ^11.0.3
-        version: 11.0.3(vue@3.4.7)
       '@nuxt/devalue':
         specifier: ^2.0.2
         version: 2.0.2

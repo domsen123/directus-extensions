@@ -40,6 +40,10 @@ export const handler: ClientHandler = async (App, options, hook) => {
       entryRoutePath = to.path
       to.meta.state = initialState.routeState ?? {}
     }
+    else {
+      // Other routes are rendered in the client and their state is provided locally.
+      to.meta.state = {}
+    }
   })
 
   app.use(router)

@@ -28,7 +28,7 @@ export type AnyItem = Record<string, unknown>
 
 interface StateItem extends AnyItem {
   __collection: string
-  __stored: number
+  __stored: string
 }
 
 interface ItemState {
@@ -40,15 +40,15 @@ export const useItemStore = defineStore('_item_', {
     items: [],
   }),
   getters: {
-    getItem: state => (primaryKey: string, collection: string, key: string) => {
-      return state.items.find(i => i.__collection === collection && i[primaryKey] === key)
-    },
+    // getItem: state => (primaryKey: string, collection: string, key: string) => {
+    //   return state.items.find(i => i.__collection === collection && i[primaryKey] === key)
+    // },
   },
   actions: {
     storeItem(collection: string, primaryKey: string, item: AnyItem) {
       const existsAtIndex = this.items.findIndex(i => i.__collection === collection && i[primaryKey] === item[primaryKey])
 
-      const stateItem: StateItem = { ...item, __collection: collection, __stored: Date.now() }
+      const stateItem: StateItem = { ...item, __collection: collection, __stored: new Date().toISOString() }
 
       if (existsAtIndex > -1)
         this.items.splice(existsAtIndex, 1, stateItem)

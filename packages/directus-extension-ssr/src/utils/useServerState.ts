@@ -1,14 +1,15 @@
 import { computed, onMounted, onServerPrefetch, ref, useAttrs } from 'vue'
 import { useRoute } from 'vue-router'
 
-interface Data {
-  [key: string]: unknown
-  errors: {
-    [key: string]: unknown
-  }
+type InitData = Record<string, () => Promise<unknown>>
+
+type StateData<T extends InitData> = {
+  [key in keyof T]?: Awaited<ReturnType<T[key]>> | null
 }
 
-type InitData = Record<string, () => Promise<unknown>>
+type Data<T extends InitData> = StateData<T> & {
+  errors: Record<string, unknown>
+}
 
 const parseError = (error: any) => {
   if ('errors' in error)
@@ -26,30 +27,35 @@ const parseError = (error: any) => {
  */
 export const useServerState = <T extends InitData = InitData>(init: T) => {
   const route = useRoute()
-  const attrs = useAttrs() as Data
+  const attrs = useAttrs() as Data<T>
 
   // Initialize loading state based on the number of init functions
   const isLoading = ref<number>(0)
   const errorList = ref<string[]>([])
-  const stateProps: Data = { errors: {} }
+
+  const stateProps: Data<T> = { errors: {} } as Data<T>
 
   // Prepare state properties
   for (const key in init)
+  // @ts-expect-error ...
     stateProps[key] = attrs[key] ?? null
 
-  const state = ref<Data>(stateProps)
+  const state = ref<StateData<T>>(stateProps)
 
   // Initialize each state property function
   const initFunctions: InitData = Object.entries(init).reduce((acc, [key, value]) => {
     acc[key] = async () => {
       isLoading.value++
       try {
-        state.value[key] = await value()
+        // @ts-expect-error ...
+        state.value[key] = await value() ?? undefined
+        // @ts-expect-error ...
         Reflect.deleteProperty(state.value.errors, key)
         errorList.value = errorList.value.filter(e => e !== key)
       }
       catch (error: any) {
         errorList.value.push(key)
+        // @ts-expect-error ...
         state.value.errors[key] = parseError(error)
       }
       finally {
@@ -68,11 +74,12 @@ export const useServerState = <T extends InitData = InitData>(init: T) => {
       else isLoading.value--
     },
   })
+  // @ts-expect-error ...
   const hasError = (prop: string) => computed<boolean>(() => !!state.value.errors[prop])
 
   // On component mount, initialize state for properties that are null
   onMounted(() => {
-    Promise.all(Object.entries(initFunctions).filter(([key, _]) => stateProps[key] === null).map(([_, value]) => value()))
+    Promise.all(Object.entries(initFunctions).filter(([key, _]) => stateProps[key] === null).map(([_, value]) => value())).then()
   })
 
   // Prefetch state on the server side

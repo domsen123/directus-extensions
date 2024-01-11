@@ -48,5 +48,17 @@ export const handler: ClientHandler = async (App, options, hook) => {
 
   app.use(router)
   await router.isReady()
-  app.mount('#app')
+  if (options.debug) {
+    setTimeout(() => {
+      app.mount('#app')
+      const ssrEnvIndicator = document.getElementById('ssr-env-indicator')
+      if (ssrEnvIndicator) {
+        ssrEnvIndicator.style.backgroundColor = 'green'
+        ssrEnvIndicator.textContent = 'Client'
+      }
+    }, options.debug)
+  }
+  else {
+    app.mount('#app')
+  }
 }

@@ -78,7 +78,7 @@ export default defineConfig(() => {
       clean: false,
       target: 'esnext',
       format: ['esm'],
-      minify,
+      minify: false,
       dts: true,
       external,
     },

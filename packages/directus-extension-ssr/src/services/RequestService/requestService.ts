@@ -28,6 +28,7 @@ export class RequestService<Schema extends object> {
       : this.requestStore.addRequest(requestKey, requestPromise)
 
     const response = await promise
+    this.requestStore.removeRequest(requestKey)
 
     return response
   }

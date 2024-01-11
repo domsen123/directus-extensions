@@ -104,9 +104,12 @@ export const handler: ServerHandler = async (App, options, hook?) => async (rend
   await router.isReady()
 
   const ctx: any = {}
-  const appHtml = await renderToString(app, ctx)
+  let appHtml = await renderToString(app, ctx)
   const appParts = await renderSSRHead(head)
   const preloadedLinks = renderPreloadLinks(ctx.modules, manifest)
+
+  if (options.debug)
+    appHtml += '<div id="ssr-env-indicator" style="width: 40px; height:15px; position: fixed; right: 4px; top: 4px; background-color: red; z-index: 9999; font-size: 12px; color: #fff; display: flex; justify-content: center; align-intems:center;">Server</div>'
 
   Object.assign(
     sharedServerOptions.initialState || {},

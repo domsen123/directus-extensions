@@ -1,6 +1,6 @@
 import type { Router } from 'vue-router'
 import type { AuthenticationData } from '@directus/sdk'
-import type { Schema, SharedHandler } from '../types/index'
+import type { SharedHandler } from '../types/index'
 
 const scrollBehavior: Router['options']['scrollBehavior'] = (_, __, savedPosition) => {
   return savedPosition || { top: 0 }
@@ -38,7 +38,7 @@ export const createApp: SharedHandler = async (App, options) => {
 
   const publicUrl: string = 'env' in options ? options.env.PUBLIC_URL : `${new URL(window.location.href).origin}/`
 
-  const directus = (await import('@directus/sdk')).createDirectus<Schema>(publicUrl)
+  const directus = (await import('@directus/sdk')).createDirectus(publicUrl)
     .with((await import('@directus/sdk')).authentication(isClient ? 'cookie' : 'json', { storage }))
     .with((await import('@directus/sdk')).rest())
     .with((await import('@directus/sdk')).graphql())

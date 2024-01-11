@@ -6,6 +6,7 @@ export interface InitialState extends AnyItem {
 
 export interface UserOptions {
   routerOptions: Omit<import('vue-router').RouterOptions, 'history'>
+  debug?: number
 }
 
 export interface RenderOptions {

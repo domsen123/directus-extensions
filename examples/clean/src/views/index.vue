@@ -10,7 +10,7 @@ const fetchCurrentUser = async () => {
   return await directus.request(readMe())
 }
 
-const { state, loading, initFunctions, hasError } = useServerState({
+const { state, loading, initFunctions, errors, serverPrefetched, isStaled } = useServerState({
   currentUser: async () => await fetchCurrentUser(),
 })
 
@@ -30,7 +30,7 @@ const logout = async () => {
 <template>
   <div>
     <div>index.vue</div>
-    <pre v-text="{ loading, hasError: hasError('currentUser').value, ...state }" />
+    <pre v-text="{ state, errors, serverPrefetched, isStaled: isStaled('currentUser') }" />
     <button type="button" @click="login">
       Login
     </button>

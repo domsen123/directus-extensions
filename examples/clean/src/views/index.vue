@@ -11,7 +11,7 @@ const fetchCurrentUser = async () => {
 }
 
 const { state, loading, initFunctions, errors, serverPrefetched, isStaled } = useServerState({
-  currentUser: async () => await fetchCurrentUser(),
+  currentUser: fetchCurrentUser(),
 })
 
 const login = async () => {

@@ -1,18 +1,59 @@
 import { createItem, createItems, deleteItem, deleteItems, readItem, readItems, updateItem, updateItems } from '@directus/sdk'
 import type { CollectionType, Query, RegularCollections, UnpackList } from '@directus/sdk'
+import type { Ref } from 'vue'
+import { computed, ref, unref, watch } from 'vue'
 import { RequestService } from '../RequestService'
+import { useItemStore } from './itemStore'
 import type { SSRDirectusClient } from '~/types'
 
 export class ItemService<Schema extends object> {
+  private itemStore = useItemStore()
   private requestService: RequestService<Schema>
 
-  constructor(directus: SSRDirectusClient<Schema>, private primaryKey: string) {
+  constructor(directus: SSRDirectusClient<Schema>) {
     this.requestService = new RequestService(directus)
   }
 
-  async queryItems<Collection extends RegularCollections<Schema>, TQuery extends Query<Schema, CollectionType<Schema, Collection>>>(collection: Collection, query: TQuery | undefined) {
-    const command = readItems<Schema, Collection, TQuery>(collection, query)
-    return await this.requestService.cachedRequest(command)
+  private storeItem = <Collection extends RegularCollections<Schema> | keyof Schema, Key extends keyof CollectionType<Schema, Collection>>(collection: Collection, primaryKey: Key, item: any) => {
+    this.itemStore.storeItem(collection as string, primaryKey as string, item)
+  }
+
+  private storeItems = <Collection extends RegularCollections<Schema> | keyof Schema, Key extends keyof CollectionType<Schema, Collection>>(collection: Collection, primaryKey: Key, items: any[]) => {
+    this.itemStore.storeItems(collection as string, primaryKey as string, items)
+  }
+
+  queryItems<Collection extends RegularCollections<Schema>, PrimaryKey extends keyof CollectionType<Schema, Collection>, TQuery extends Query<Schema, CollectionType<Schema, Collection>>>(collection: Collection, primaryKey: PrimaryKey, query: Ref<TQuery>) {
+    const ids = ref<CollectionType<Schema, Collection>[PrimaryKey][]>([])
+
+    const result = computed(() => this.itemStore.getItemsByPrimaryKeys(collection as string, primaryKey as string, ids))
+
+    const fetchItems = import.meta.env.SSR
+      ? async () => {
+        console.log('fetching items SSR')
+        const command = readItems<Schema, Collection, TQuery>(collection, unref(query))
+
+        const items = await this.requestService.cachedRequest(command)
+        this.storeItems(collection, primaryKey, items)
+        // @ts-expect-error ...
+        ids.value = items.map(item => item[primaryKey])
+        return result
+      } : () => {
+        console.log('fetching items CLIENT')
+        const command = readItems<Schema, Collection, TQuery>(collection, unref(query))
+        this.requestService.cachedRequest(command).then((items) => {
+          this.storeItems(collection, primaryKey, items)
+          // @ts-expect-error ...
+          ids.value = items.map(item => item[primaryKey])
+        })
+        return result
+      }
+
+    watch(query, async () => {
+      console.log('query changed')
+      await fetchItems()
+    })
+
+    return fetchItems()
   }
 
   async readItem<Collection extends RegularCollections<Schema>, TQuery extends Query<Schema, CollectionType<Schema, Collection>>>(collection: Collection, key: string, query?: TQuery | undefined) {

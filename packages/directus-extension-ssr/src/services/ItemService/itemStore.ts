@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import type { Ref } from 'vue'
 
 // export const useItemStore = <
 //   Schema extends object,
@@ -40,9 +41,8 @@ export const useItemStore = defineStore('_item_', {
     items: [],
   }),
   getters: {
-    // getItem: state => (primaryKey: string, collection: string, key: string) => {
-    //   return state.items.find(i => i.__collection === collection && i[primaryKey] === key)
-    // },
+    // @ts-expect-error ...
+    getItemsByPrimaryKeys: state => (collection: string, primaryKey: string, keys: Ref<string[]>) => state.items.filter(i => i.__collection === collection && keys.value.includes(i[primaryKey])),
   },
   actions: {
     storeItem(collection: string, primaryKey: string, item: AnyItem) {
@@ -55,14 +55,9 @@ export const useItemStore = defineStore('_item_', {
 
       else
         this.items.push(stateItem)
-
-      return stateItem
     },
     storeItems(collection: string, primaryKey: string, items: AnyItem[]) {
-      return items.map(item => this.storeItem(collection, primaryKey, item))
-    },
-    getItem(collection: string, primaryKey: string, key: string) {
-      return this.items.find(i => i.__collection === collection && i[primaryKey] === key)
+      items.map(item => this.storeItem(collection, primaryKey, item))
     },
   },
 })

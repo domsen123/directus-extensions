@@ -19,7 +19,7 @@ export const useItemStore = defineStore('_item_', {
   getters: {
     getItemsByKeys: state => (collection: string, primaryKey: string, keys: Ref<string[] | null>) => {
       // @ts-expect-error ...
-      return keys.value ? state.items.filter(i => i.__collection === collection && keys.includes(i[primaryKey])) : null
+      return keys.value ? state.items.filter(i => i.__collection === collection && keys.value.includes(i[primaryKey])) : null
     },
   },
   actions: {

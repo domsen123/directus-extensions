@@ -6,16 +6,13 @@ import type { ISchema } from '~/interfaces'
 
 const directus = inject('directus') as SSRDirectusClient<ISchema>
 
-const itemService = new ItemService(directus, 'uuid')
+const itemService = new ItemService(directus)
 
 const { state, errors } = useServerState({
-  item: async () => await itemService.readItem('test_collection', '04806951-1fb3-40f6-9e6f-a4ec970e578a', {
-    fields: ['uuid', 'name', 'date_updated'],
-  }),
-  items: async () => await itemService.queryItems('test_collection', {
+  items: itemService.queryItems('test_collection', 'uuid', ref({
     fields: ['uuid', 'name', 'date_updated'],
     limit: 3,
-  }),
+  })),
 })
 </script>
 

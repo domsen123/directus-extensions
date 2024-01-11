@@ -35,22 +35,32 @@ export class ItemService<Schema extends object> {
       return this.requestService.request(command)
     }
 
-    const store = (result: any[]) => {
+    const setIds = (result: any[]) => {
       ids.value = result.map(i => i[primaryKey])
-      this.storeItems(collection, primaryKey as string, result)
     }
 
-    const sync = async () => {
-      const result = await fetch()
-      store(result)
-      return items
+    const store = (result: any[]) => {
+      setIds(result.map(i => i[primaryKey]))
+
+      this.storeItems(collection, primaryKey as string, result)
     }
 
     const emit = (defaultValue: any[] | null) => {
       return items ?? defaultValue
     }
 
-    const async = (defaultValue: any[] | null, onError: (error: Error) => void, onFinally: () => void) => {
+    const sync = async () => {
+      const result = await fetch()
+      store(result)
+      return emit(null)
+    }
+
+    const set = (items: any[]) => {
+      console.log(items)
+      setIds(items)
+    }
+
+    const async = (defaultValue: any[] | null, onError?: (error: Error) => void, onFinally?: () => void) => {
       sync().catch(onError).finally(onFinally)
       return emit(defaultValue)
     }
@@ -59,6 +69,7 @@ export class ItemService<Schema extends object> {
       sync,
       async,
       emit,
+      set,
     }
   }
 

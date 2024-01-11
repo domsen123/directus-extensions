@@ -72,9 +72,9 @@ export default defineConfig(() => {
     },
     {
       entry: {
-        index: './src/utils/index.ts',
+        index: './src/services/index.ts',
       },
-      outDir: 'dist/utils',
+      outDir: 'dist/services',
       clean: false,
       target: 'esnext',
       format: ['esm'],
@@ -84,9 +84,9 @@ export default defineConfig(() => {
     },
     {
       entry: {
-        index: './src/services/index.ts',
+        index: './src/utils/index.ts',
       },
-      outDir: 'dist/services',
+      outDir: 'dist/utils',
       clean: false,
       target: 'esnext',
       format: ['esm'],

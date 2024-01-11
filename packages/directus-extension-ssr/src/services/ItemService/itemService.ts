@@ -1,22 +1,70 @@
 import { createItem, createItems, deleteItem, deleteItems, readItem, readItems, updateItem, updateItems } from '@directus/sdk'
 import type { CollectionType, Query, RegularCollections, UnpackList } from '@directus/sdk'
+import type { Ref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { RequestService } from '../RequestService'
+import { useItemStore } from './itemStore'
 import type { SSRDirectusClient } from '~/types'
 
 export class ItemService<Schema extends object> {
   private requestService: RequestService<Schema>
+  private itemStore = useItemStore()
 
-  constructor(directus: SSRDirectusClient<Schema>, private primaryKey: string) {
+  constructor(directus: SSRDirectusClient<Schema>) {
     this.requestService = new RequestService(directus)
   }
 
-  async queryItems<Collection extends RegularCollections<Schema>, TQuery extends Query<Schema, CollectionType<Schema, Collection>>>(collection: Collection, query: TQuery | undefined) {
-    const command = readItems<Schema, Collection, TQuery>(collection, query)
-    return await this.requestService.cachedRequest(command)
+  private storeItem(collection: any, primaryKey: string, item: any) {
+    this.itemStore.storeItem(collection, primaryKey, item)
+  }
+
+  private storeItems(collection: any, primaryKey: string, items: any[]) {
+    this.itemStore.storeItems(collection, primaryKey, items)
+  }
+
+  queryItems<
+    Collection extends RegularCollections<Schema>,
+    PrimaryKey extends keyof CollectionType<Schema, Collection>,
+    TQuery extends Query<Schema, CollectionType<Schema, Collection>>,
+  >(collection: Collection, primaryKey: PrimaryKey, query: Ref<TQuery>) {
+    const ids = ref<(CollectionType<Schema, Collection>[PrimaryKey])[] | null>(null)
+    const items = computed(() => this.itemStore.getItemsByKeys(collection as string, primaryKey as string, ids))
+
+    const fetch = async () => {
+      const command = readItems<Schema, Collection, TQuery>(collection, unref(query))
+      return this.requestService.request(command)
+    }
+
+    const store = (result: any[]) => {
+      ids.value = result.map(i => i[primaryKey])
+      this.storeItems(collection, primaryKey as string, result)
+    }
+
+    const sync = async () => {
+      const result = await fetch()
+      store(result)
+      return items
+    }
+
+    const emit = (defaultValue: any[] | null) => {
+      return items ?? defaultValue
+    }
+
+    const async = (defaultValue: any[] | null, onError: (error: Error) => void, onFinally: () => void) => {
+      sync().catch(onError).finally(onFinally)
+      return emit(defaultValue)
+    }
+
+    return {
+      sync,
+      async,
+      emit,
+    }
   }
 
   async readItem<Collection extends RegularCollections<Schema>, TQuery extends Query<Schema, CollectionType<Schema, Collection>>>(collection: Collection, key: string, query?: TQuery | undefined) {
     const command = readItem<Schema, Collection, TQuery>(collection, key, query)
+
     return await this.requestService.cachedRequest(command)
   }
 

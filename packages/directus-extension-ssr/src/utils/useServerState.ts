@@ -3,7 +3,11 @@ import { computed, onMounted, onServerPrefetch, ref, useAttrs } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface InitData {
-  [key: string]: () => Promise<any>
+  [key: string]: () => {
+    sync: () => Promise<unknown>
+    async: (defaultValue: unknown) => unknown
+    emit: (defaultValue: unknown) => unknown
+  }
 }
 
 interface AttrData<T extends InitData> {
@@ -33,14 +37,32 @@ const parseError = (error: any) => {
   else return error
 }
 
+// const createInitFunction = <T = unknown>(fn: () => Promise<T>, defaultValue: T) => {
+//   return {
+//     then: (thenFn: (value: T) => void) => {
+//       fn().then(thenFn).catch(()=> this.catch)
+//     },
+//     catch: (errorFn: (error: unknown) => void) => {
+//       promise.catch(errorFn)
+//     },
+//     finally: (finallyFn: () => void) => {
+//       promise.finally(finallyFn)
+//     },
+//     resolve: () => {
+//       promise.then()
+//       return defaultValue
+//     },
+//   }
+// }
+
 /**
  * Custom hook to manage server state in a Vue application.
  *
- * @param {InitData} init - An object where keys are state properties and values are functions to initialize these properties.
+ * @param {InitData} initFunctions - An object where keys are state properties and values are functions to initialize these properties.
  * @param {number} [stale] - The time in milliseconds after which the server state is considered stale. Default to 5 minutes.
  * @returns An object containing the state, loading status, error checker function, and the initialized functions.
  */
-export const useServerState = <T extends InitData = InitData>(init: T, stale = 1000 * 5 * 60) => {
+export const useServerState = <T extends InitData = InitData>(initFunctions: T, stale = 1000 * 5 * 60) => {
   const route = useRoute()
   const attrs = useAttrs() as unknown as AttrData<T>
 
@@ -52,7 +74,7 @@ export const useServerState = <T extends InitData = InitData>(init: T, stale = 1
   const errorProps: ErrorData<T> = {}
 
   // Prepare state properties
-  for (const key in init) {
+  for (const key in initFunctions) {
     stateProps[key] = attrs.state?.[key] ?? null
     errorProps[key] = attrs.errors?.[key] ?? null
   }
@@ -60,35 +82,81 @@ export const useServerState = <T extends InitData = InitData>(init: T, stale = 1
   const state = ref<StateData<T>>(stateProps)
   const errors = ref<ErrorData<T>>(errorProps)
 
-  // Initialize each state property function
-  const initFunctions: InitData = Object.entries(init).reduce((acc, [_key, value]) => {
-    const key = _key as keyof InitData
-    acc[key] = async (onServer = false) => {
-      isLoading.value++
-      try {
-        state.value[key as keyof UnwrapRef<StateData<T>>] = await value() ?? undefined
-        // @ts-expect-error ...
-        errors.value[key as keyof UnwrapRef<ErrorData<T>>] = null
-      }
-      catch (error: any) {
-        errors.value[key as keyof UnwrapRef<ErrorData<T>>] = parseError(error)
-      }
-      finally {
-        isLoading.value--
-        if (onServer) {
-          serverPrefetched.value.push({
-            // @ts-expect-error ...
-            key,
-            at: Date.now(),
-          })
+  // // Initialize each state property function
+  // const initFunctions: InitData = Object.entries(init).reduce((acc, [_key, value]) => {
+  //   const key = _key as keyof InitData
+  //   acc[key] = async (onServer = false) => {
+  //     isLoading.value++
+  //     try {
+  //       state.value[key as keyof UnwrapRef<StateData<T>>] = await value() ?? undefined
+  //       // @ts-expect-error ...
+  //       errors.value[key as keyof UnwrapRef<ErrorData<T>>] = null
+  //     }
+  //     catch (error: any) {
+  //       errors.value[key as keyof UnwrapRef<ErrorData<T>>] = parseError(error)
+  //     }
+  //     finally {
+  //       isLoading.value--
+  //       if (onServer) {
+  //         serverPrefetched.value.push({
+  //           // @ts-expect-error ...
+  //           key,
+  //           at: Date.now(),
+  //         })
+  //       }
+  //       else {
+  //         serverPrefetched.value = serverPrefetched.value.filter(s => s.key !== key)
+  //       }
+  //     }
+  //   }
+  //   return acc
+  // }, {} as InitData)
+
+  const onSuccess = (key: any, items: unknown) => {
+    // @ts-expect-error ...
+    state.value[key as keyof UnwrapRef<StateData<T>>] = items
+    // @ts-expect-error ...
+    errors.value[key as keyof UnwrapRef<ErrorData<T>>] = null
+  }
+
+  const onError = (key: any, error: unknown) => {
+    errors.value[key as keyof UnwrapRef<ErrorData<T>>] = parseError(error)
+  }
+
+  const onFinally = (key: any, onServer: boolean) => {
+    isLoading.value--
+    if (onServer) {
+      serverPrefetched.value.push({
+        key,
+        at: Date.now(),
+      })
+    }
+    else {
+      serverPrefetched.value = serverPrefetched.value.filter(s => s.key !== key)
+    }
+  }
+
+  const callInitFunction = <K extends keyof InitData>(key: K, fns: InitData[K], onServer: boolean) => {
+    isLoading.value++
+    if (onServer) {
+      return async () => {
+        try {
+          const result = await fns().sync()
+          onSuccess(key, result)
         }
-        else {
-          serverPrefetched.value = serverPrefetched.value.filter(s => s.key !== key)
+        catch (error: any) {
+          onError(key, error)
+        }
+        finally {
+          onFinally(key, onServer)
         }
       }
     }
-    return acc
-  }, {} as InitData)
+    return (sync: boolean) => {
+      // @ts-expect-error ...
+      state.value[key as keyof UnwrapRef<StateData<T>>] = (sync ? fns().async(attrs[key], error => onError(key, error), () => onFinally(key, onServer)) : fns().emit(attrs[key])) ?? attrs[key]
+    }
+  }
 
   // Computed properties to track loading and errors
   const loading = computed<boolean>({
@@ -115,19 +183,15 @@ export const useServerState = <T extends InitData = InitData>(init: T, stale = 1
   // On component mount, initialize state for properties that are null
   onMounted(() => {
     Promise.all(Object.entries(initFunctions)
-      .filter(([key, _]) => {
-        if (isStaled(key as keyof UnwrapRef<ErrorData<T>>))
-          return true
-
-        return stateProps[key] === null && !isServerPrefetched(key as keyof UnwrapRef<ErrorData<T>>) && !hasError(key as keyof UnwrapRef<ErrorData<T>>).value && isStaled(key as keyof UnwrapRef<ErrorData<T>>)
-      })
-      .map(([_, fn]) => fn()))
+      .map(([key, fn]) => {
+        return callInitFunction(key as keyof InitData, fn, false)(isStaled(key as keyof UnwrapRef<ErrorData<T>>) || isServerPrefetched(key as keyof UnwrapRef<ErrorData<T>>) || hasError(key as keyof UnwrapRef<ErrorData<T>>).value || stateProps[key] === null)
+      }))
   })
 
   // Prefetch state on the server side
   onServerPrefetch(async () => {
     // @ts-expect-error ...
-    await Promise.all(Object.values(initFunctions).map(fn => fn(true)))
+    await Promise.all(Object.entries(initFunctions).map(([key, fn]) => callInitFunction(key, fn, true)()))
     route.meta.state = {
       state: state.value ?? {},
       errors: errors.value ?? {},
